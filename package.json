@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json -d",
-    "lint": "eslint --ext .ts src bin",
+    "lint": "eslint --ext .ts server bin",
     "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
