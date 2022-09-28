@@ -2,9 +2,12 @@
   "name": "@nerest/nerest",
   "version": "0.0.1",
   "description": "React micro frontend framework",
+  "bin": {
+    "nerest": "dist/bin/index.js"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json -d",
-    "lint": "eslint --ext .ts src"
+    "lint": "eslint --ext .ts src bin"
   },
   "prettier": "@tinkoff/prettier-config",
   "eslintConfig": {
