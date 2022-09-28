@@ -1,5 +1,11 @@
 {
   "name": "@nerest/nerest",
   "version": "0.0.1",
-  "description": "TypeScript micro frontend framework"
+  "description": "TypeScript micro frontend framework",
+  "scripts": {
+    "build": "tsc -p tsconfig.json -d"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
 }
