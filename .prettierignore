@@ -1,0 +1,6 @@
+# Keep in sync with .gitignore
+/node_modules
+/dist
+
+# Unique rules for prettier
+/package-lock.json
