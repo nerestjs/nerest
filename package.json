@@ -33,6 +33,10 @@
       "@tinkoff/eslint-config-react"
     ]
   },
+  "dependencies": {
+    "fastify": "^4.7.0",
+    "vite": "^3.1.4"
+  },
   "devDependencies": {
     "@tinkoff/eslint-config": "^1.36.1",
     "@tinkoff/eslint-config-react": "^1.36.1",
