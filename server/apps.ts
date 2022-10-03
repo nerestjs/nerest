@@ -16,7 +16,7 @@ export async function loadApps(root: string) {
         root: appRoot,
         entry: path.join(appRoot, 'index.tsx'),
       },
-    ];
+    ] as [string, { root: string; entry: string }];
   });
 
   return Object.fromEntries(apps);
