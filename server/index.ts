@@ -2,7 +2,7 @@
 import fastify from 'fastify';
 import vite from 'vite';
 
-async function createServer() {
+export async function createServer() {
   const root = process.cwd();
 
   const viteSsr = vite.createServer({ root, appType: 'custom' });
@@ -13,8 +13,3 @@ async function createServer() {
 
   return { app };
 }
-
-createServer().then(async ({ app }) => {
-  await app.listen({ port: 3000 });
-  console.log('Nerest is listening on port 3000');
-});
