@@ -14,16 +14,16 @@ export async function createServer() {
 
   const app = fastify();
 
-  Object.entries(apps).forEach(([appName, appEntry]) => {
-    app.get(`/api/${appName}`, async (request, reply) => {
+  for (const [appName, appEntry] of Object.entries(apps)) {
+    app.post(`/api/${appName}`, async (request) => {
       const ssrComponent = await viteSsr.ssrLoadModule(appEntry.entry);
-      const markup = renderSsrComponent(ssrComponent.default);
-
-      reply.type('text/html');
-
-      return markup;
+      const html = renderSsrComponent(
+        ssrComponent.default,
+        request.body as Record<string, unknown>
+      );
+      return { html, assets: [] };
     });
-  });
+  }
 
   return { app };
 }
