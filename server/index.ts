@@ -33,8 +33,9 @@ export async function createServer() {
   const app = fastify();
 
   for (const [appName, appEntry] of Object.entries(apps)) {
+    const { entry, assets } = appEntry;
     app.post(`/api/${appName}`, async (request) => {
-      const ssrComponent = await viteSsr.ssrLoadModule(appEntry.entry, {
+      const ssrComponent = await viteSsr.ssrLoadModule(entry, {
         fixStacktrace: true,
       });
       const html = renderSsrComponent(
@@ -42,7 +43,7 @@ export async function createServer() {
         ssrComponent.default,
         request.body as Record<string, unknown>
       );
-      return { html, assets: [] };
+      return { html, assets };
     });
   }
 
