@@ -2,13 +2,30 @@
 import fastify from 'fastify';
 import vite from 'vite';
 
+import type { InlineConfig } from 'vite';
+
 import { loadApps } from './apps';
 import { renderSsrComponent } from './entry';
 
 export async function createServer() {
   const root = process.cwd();
 
-  const viteSsr = await vite.createServer({ root, appType: 'custom' });
+  const config: InlineConfig = {
+    root,
+    appType: 'custom',
+    build: {
+      manifest: true,
+      modulePreload: false,
+      rollupOptions: {
+        input: '/node_modules/@nerest/nerest/client/entry.ts',
+      },
+    },
+  };
+
+  const viteSsr = await vite.createServer(config);
+
+  // TODO: this is here temporarily for testing purposes only
+  await vite.build(config);
 
   const apps = await loadApps(root);
 
