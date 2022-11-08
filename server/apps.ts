@@ -2,6 +2,9 @@ import path from 'path';
 import fs from 'fs/promises';
 import type { Manifest } from 'vite';
 
+// TODO: way more complicated in the real world
+const publicPath = process.env.PUBLIC_PATH ?? 'http://127.0.0.1:3000/';
+
 export async function loadApps(root: string) {
   const appsRoot = path.join(root, 'apps');
   const manifest = await loadManifest(root);
@@ -39,5 +42,5 @@ function getAppAssets(manifest: Manifest, appName: string) {
     entries.find(([name, _]) => name.includes(`/${appName}/index.tsx`))?.[1]
       .css ?? [];
 
-  return [clientEntryJs, ...appCss];
+  return [clientEntryJs, ...appCss].map((x) => publicPath + x);
 }

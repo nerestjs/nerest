@@ -1,8 +1,11 @@
 // This is the nerest server entrypoint
-import fastify from 'fastify';
-import vite from 'vite';
+import path from 'path';
 
+import vite from 'vite';
 import type { InlineConfig } from 'vite';
+
+import fastify from 'fastify';
+import fastifyStatic from '@fastify/static';
 
 import { loadApps } from './apps';
 import { renderSsrComponent } from './entry';
@@ -46,6 +49,11 @@ export async function createServer() {
       return { html, assets };
     });
   }
+
+  // TODO: only do this locally, load from CDN in production
+  app.register(fastifyStatic, {
+    root: path.join(root, 'dist'),
+  });
 
   return { app };
 }
