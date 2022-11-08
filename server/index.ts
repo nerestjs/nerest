@@ -13,6 +13,7 @@ export async function createServer() {
   const config: InlineConfig = {
     root,
     appType: 'custom',
+    server: { middlewareMode: true },
     build: {
       manifest: true,
       modulePreload: false,
@@ -33,8 +34,11 @@ export async function createServer() {
 
   for (const [appName, appEntry] of Object.entries(apps)) {
     app.post(`/api/${appName}`, async (request) => {
-      const ssrComponent = await viteSsr.ssrLoadModule(appEntry.entry);
+      const ssrComponent = await viteSsr.ssrLoadModule(appEntry.entry, {
+        fixStacktrace: true,
+      });
       const html = renderSsrComponent(
+        appName,
         ssrComponent.default,
         request.body as Record<string, unknown>
       );
