@@ -4,10 +4,10 @@ import { nanoid } from 'nanoid';
 
 export function renderSsrComponent(
   appName: string,
-  AppComponent: React.ComponentType,
+  appComponent: React.ComponentType,
   props: Record<string, unknown> = {}
 ) {
-  const html = renderToString(React.createElement(AppComponent, props));
+  const html = renderToString(React.createElement(appComponent, props));
   const appId = nanoid();
 
   const container = `<div data-app-name="${appName}" data-app-id="${appId}">${html}</div>`;

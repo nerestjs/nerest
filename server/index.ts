@@ -32,13 +32,12 @@ export async function createServer() {
     },
   };
 
-  const viteSsr = await vite.createServer(config);
-
   // TODO: this is here temporarily for testing purposes only
   await vite.build(config);
 
   const apps = await loadApps(root);
 
+  const viteSsr = await vite.createServer(config);
   const app = fastify();
 
   for (const [appName, appEntry] of Object.entries(apps)) {
