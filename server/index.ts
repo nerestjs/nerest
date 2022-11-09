@@ -8,7 +8,7 @@ import fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 
 import { loadApps } from './apps';
-import { renderSsrComponent } from './entry';
+import { renderSsrComponent } from './render';
 
 export async function createServer() {
   const root = process.cwd();
@@ -20,8 +20,14 @@ export async function createServer() {
     build: {
       manifest: true,
       modulePreload: false,
+      watch: {},
       rollupOptions: {
-        input: '/node_modules/@nerest/nerest/client/entry.ts',
+        input: '/node_modules/@nerest/nerest/client/index.ts',
+        output: {
+          entryFileNames: `assets/[name].js`,
+          chunkFileNames: `assets/[name].js`,
+          assetFileNames: `assets/[name].[ext]`,
+        },
       },
     },
   };

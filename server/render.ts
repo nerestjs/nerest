@@ -7,7 +7,7 @@ export function renderSsrComponent(
   AppComponent: React.ComponentType,
   props: Record<string, unknown> = {}
 ) {
-  const html = renderToString(<AppComponent {...props} />);
+  const html = renderToString(React.createElement(AppComponent, props));
   const appId = nanoid();
 
   const container = `<div data-app-name="${appName}" data-app-id="${appId}">${html}</div>`;
