@@ -9,6 +9,7 @@ import fastifyStatic from '@fastify/static';
 
 import { loadApps } from './apps';
 import { renderApp } from './render';
+import { renderPreviewPage } from './preview';
 
 export async function createServer() {
   const root = process.cwd();
@@ -55,15 +56,19 @@ export async function createServer() {
     });
 
     for (const [exampleName, example] of Object.entries(examples)) {
-      app.get(`/api/${name}/examples/${exampleName}`, async () => {
+      app.get(`/api/${name}/examples/${exampleName}`, async (_, reply) => {
         const ssrComponent = await viteSsr.ssrLoadModule(entry, {
           fixStacktrace: true,
         });
-        return renderApp(
+        const { html, assets } = renderApp(
           appEntry,
           ssrComponent.default,
           example as Record<string, unknown>
         );
+
+        reply.type('text/html');
+
+        return renderPreviewPage(html, assets);
       });
     }
   }
