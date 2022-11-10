@@ -5,15 +5,13 @@ import type { Manifest } from 'vite';
 import { loadAppAssets } from './app-parts/assets';
 import { loadAppExamples } from './app-parts/examples';
 
-type AppEntry = [
-  name: string,
-  entry: {
-    root: string;
-    entry: string;
-    assets: string[];
-    examples: Record<string, unknown>;
-  }
-];
+export type AppEntry = {
+  name: string;
+  root: string;
+  entry: string;
+  assets: string[];
+  examples: Record<string, unknown>;
+};
 
 export async function loadApps(root: string) {
   const appsRoot = path.join(root, 'apps');
@@ -23,7 +21,7 @@ export async function loadApps(root: string) {
     .filter((d) => d.isDirectory())
     .map((d) => d.name);
 
-  const apps: AppEntry[] = [];
+  const apps: Array<[name: string, entry: AppEntry]> = [];
   for (const appDir of appsDirs) {
     apps.push(await loadApp(appsRoot, appDir, manifest));
   }
@@ -35,11 +33,12 @@ async function loadApp(
   appsRoot: string,
   name: string,
   manifest: Manifest
-): Promise<AppEntry> {
+): Promise<[name: string, entry: AppEntry]> {
   const appRoot = path.join(appsRoot, name);
   return [
     name,
     {
+      name,
       root: appRoot,
       entry: path.join(appRoot, 'index.tsx'),
       assets: loadAppAssets(manifest, name),

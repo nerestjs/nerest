@@ -8,7 +8,7 @@ import fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 
 import { loadApps } from './apps';
-import { renderSsrComponent } from './render';
+import { renderApp } from './render';
 
 export async function createServer() {
   const root = process.cwd();
@@ -40,19 +40,32 @@ export async function createServer() {
   const viteSsr = await vite.createServer(config);
   const app = fastify();
 
-  for (const [appName, appEntry] of Object.entries(apps)) {
-    const { entry, assets } = appEntry;
-    app.post(`/api/${appName}`, async (request) => {
+  for (const appEntry of Object.values(apps)) {
+    const { name, entry, examples } = appEntry;
+
+    app.post(`/api/${name}`, async (request) => {
       const ssrComponent = await viteSsr.ssrLoadModule(entry, {
         fixStacktrace: true,
       });
-      const html = renderSsrComponent(
-        appName,
+      return renderApp(
+        appEntry,
         ssrComponent.default,
         request.body as Record<string, unknown>
       );
-      return { html, assets };
     });
+
+    for (const [exampleName, example] of Object.entries(examples)) {
+      app.get(`/api/${name}/examples/${exampleName}`, async () => {
+        const ssrComponent = await viteSsr.ssrLoadModule(entry, {
+          fixStacktrace: true,
+        });
+        return renderApp(
+          appEntry,
+          ssrComponent.default,
+          example as Record<string, unknown>
+        );
+      });
+    }
   }
 
   // TODO: only do this locally, load from CDN in production
