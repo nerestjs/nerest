@@ -13,6 +13,9 @@ export type AppEntry = {
   examples: Record<string, unknown>;
 };
 
+// Build the record of the available apps by convention
+// apps -> /apps/{name}/index.tsx
+// examples -> /apps/{name}/examples/{example}.json
 export async function loadApps(root: string) {
   const appsRoot = path.join(root, 'apps');
   const manifest = await loadManifest(root);
@@ -34,6 +37,7 @@ async function loadApp(
   name: string,
   manifest: Manifest
 ): Promise<[name: string, entry: AppEntry]> {
+  // TODO: report problems with loading entries, assets and/or examples
   const appRoot = path.join(appsRoot, name);
   return [
     name,
@@ -47,7 +51,10 @@ async function loadApp(
   ];
 }
 
+// Manifest is used to provide assets list for every app
+// for use with SSR
 async function loadManifest(root: string) {
+  // TODO: error handling
   const manifestPath = path.join(root, 'dist', 'manifest.json');
   const manifestData = await fs.readFile(manifestPath, { encoding: 'utf8' });
   return JSON.parse(manifestData);
