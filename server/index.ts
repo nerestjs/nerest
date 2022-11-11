@@ -3,6 +3,7 @@ import path from 'path';
 
 import vite from 'vite';
 import type { InlineConfig } from 'vite';
+import type { RollupWatcher, RollupWatcherEvent } from 'rollup';
 
 import fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
@@ -33,8 +34,8 @@ export async function createServer() {
     },
   };
 
-  // TODO: this is here temporarily for testing purposes only
-  await vite.build(config);
+  // TODO: this should probably be moved from here
+  await startClientBuildWatcher(config);
 
   const apps = await loadApps(root);
 
@@ -79,4 +80,17 @@ export async function createServer() {
   });
 
   return { app };
+}
+
+async function startClientBuildWatcher(config: InlineConfig) {
+  const watcher = (await vite.build(config)) as RollupWatcher;
+  return new Promise<void>((resolve) => {
+    const listener = (ev: RollupWatcherEvent) => {
+      if (ev.code === 'END') {
+        watcher.off('event', listener);
+        resolve();
+      }
+    };
+    watcher.on('event', listener);
+  });
 }
