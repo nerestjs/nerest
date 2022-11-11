@@ -1,5 +1,6 @@
 // This is the nerest server entrypoint
 import path from 'path';
+import type { ServerResponse } from 'http';
 
 import vite from 'vite';
 import type { InlineConfig } from 'vite';
@@ -77,6 +78,15 @@ export async function createServer() {
   // TODO: only do this locally, load from CDN in production
   app.register(fastifyStatic, {
     root: path.join(root, 'dist'),
+    // TODO: maybe use @fastify/cors instead
+    setHeaders(res: ServerResponse) {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET');
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-Requested-With, content-type, Authorization'
+      );
+    },
   });
 
   return { app };
