@@ -5,6 +5,12 @@
   "bin": {
     "nerest": "dist/bin/index.js"
   },
+  "files": [
+    "/dist",
+    "/bin",
+    "/client",
+    "/server"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json -d",
     "lint": "eslint --ext .ts server bin",
