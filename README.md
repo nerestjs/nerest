@@ -10,6 +10,12 @@ React micro frontend framework
 npm i --save @nerest/nerest react react-dom
 ```
 
+## Points of Interest
+
+- SSR server entry: [server/index.ts](server/index.ts)
+- Hydrating client entry: [client/index.ts](client/index.ts)
+- CLI entry: [bin/index.ts](bin/index.ts)
+
 ## Conventions
 
 The `apps` directory must contain all of the apps provided by the micro frontend. E.g. `/apps/foo/index.tsx` is the entrypoint component of the `foo` app. It becomes available as the `/api/foo` route of the micro frontend server.
