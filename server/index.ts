@@ -88,7 +88,14 @@ export async function createServer() {
     });
 
     for (const [exampleName, example] of Object.entries(examples)) {
-      // TODO: validate example against the app's specified schema
+      // Validate example against schema when specified
+      if (schema && !validator.validate(schema, example)) {
+        // TODO: use logger and display errors more prominently
+        console.error(
+          `Example "${exampleName}" of app "${name}" does not satisfy schema: ${validator.errorsText()}`
+        );
+      }
+
       // GET /api/{name}/examples/{example} -> render a preview page
       // with a predefined example body
       app.get(`/api/${name}/examples/${exampleName}`, async (_, reply) => {
