@@ -6,6 +6,7 @@ import vite from 'vite';
 import type { InlineConfig } from 'vite';
 import type { RollupWatcher, RollupWatcherEvent } from 'rollup';
 
+import type { RouteShorthandOptions } from 'fastify';
 import fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 
@@ -54,10 +55,20 @@ export async function createServer() {
   const app = fastify();
 
   for (const appEntry of Object.values(apps)) {
-    const { name, entry, examples } = appEntry;
+    const { name, entry, examples, schema } = appEntry;
+
+    const routeOptions: RouteShorthandOptions = {};
+
+    // TODO: report error if schema is missing, unless this app is client-only.
+    // TODO: disallow apps without schemas in production build
+    if (schema) {
+      routeOptions.schema = {
+        body: schema,
+      };
+    }
 
     // POST /api/{name} -> render app with request.body as props
-    app.post(`/api/${name}`, async (request) => {
+    app.post(`/api/${name}`, routeOptions, async (request) => {
       // ssrLoadModule drives the "hot-reload" logic, and allows
       // picking up changes to the source without restarting the server
       const ssrComponent = await viteSsr.ssrLoadModule(entry, {
@@ -71,6 +82,7 @@ export async function createServer() {
     });
 
     for (const [exampleName, example] of Object.entries(examples)) {
+      // TODO: validate example against the app's specified schema
       // GET /api/{name}/examples/{example} -> render a preview page
       // with a predefined example body
       app.get(`/api/${name}/examples/${exampleName}`, async (_, reply) => {

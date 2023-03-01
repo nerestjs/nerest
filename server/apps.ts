@@ -4,6 +4,7 @@ import type { Manifest } from 'vite';
 
 import { loadAppAssets } from './app-parts/assets';
 import { loadAppExamples } from './app-parts/examples';
+import { loadAppSchema } from './app-parts/schema';
 
 export type AppEntry = {
   name: string;
@@ -11,6 +12,7 @@ export type AppEntry = {
   entry: string;
   assets: string[];
   examples: Record<string, unknown>;
+  schema: Record<string, unknown> | null;
 };
 
 // Build the record of the available apps by convention
@@ -47,6 +49,7 @@ async function loadApp(
       entry: path.join(appRoot, 'index.tsx'),
       assets: loadAppAssets(manifest, name),
       examples: await loadAppExamples(appRoot),
+      schema: await loadAppSchema(appRoot),
     },
   ];
 }
