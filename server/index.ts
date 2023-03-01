@@ -13,6 +13,7 @@ import fastifyStatic from '@fastify/static';
 import { loadApps } from './apps';
 import { renderApp } from './render';
 import { renderPreviewPage } from './preview';
+import { validator } from './validator';
 
 // TODO: this turned out to be a dev server, production server
 // will most likely be implemented separately
@@ -53,6 +54,11 @@ export async function createServer() {
   // Start vite server that will be rendering SSR components
   const viteSsr = await vite.createServer(config);
   const app = fastify();
+
+  // Setup schema validation. We have to use our own ajv instance that
+  // we can use both to validate request bodies and examples against
+  // app schemas
+  app.setValidatorCompiler(({ schema }) => validator.compile(schema));
 
   for (const appEntry of Object.values(apps)) {
     const { name, entry, examples, schema } = appEntry;
