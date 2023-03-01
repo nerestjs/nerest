@@ -14,6 +14,7 @@ import { loadApps } from './apps';
 import { renderApp } from './render';
 import { renderPreviewPage } from './preview';
 import { validator } from './validator';
+import { setupSwagger } from './swagger';
 
 // TODO: this turned out to be a dev server, production server
 // will most likely be implemented separately
@@ -59,6 +60,8 @@ export async function createServer() {
   // we can use both to validate request bodies and examples against
   // app schemas
   app.setValidatorCompiler(({ schema }) => validator.compile(schema));
+
+  await setupSwagger(app);
 
   for (const appEntry of Object.values(apps)) {
     const { name, entry, examples, schema } = appEntry;
@@ -116,7 +119,7 @@ export async function createServer() {
   }
 
   // TODO: only do this locally, load from CDN in production
-  app.register(fastifyStatic, {
+  await app.register(fastifyStatic, {
     root: path.join(root, 'dist'),
     // TODO: maybe use @fastify/cors instead
     setHeaders(res: ServerResponse) {
