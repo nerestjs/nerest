@@ -30,6 +30,8 @@ The app directory may contain an `examples` subdirectory with example JSON files
 
 The app directory should contain a `schema.json` file that describes the schema of a request body for this specific app in the [JSON Schema language](https://json-schema.org/). All requests sent to this app, and app examples from the `examples` subdirectory will be validated against this schema. `ajv` and `ajv-formats` are used for validation, so all JSON Schema features implemented by them are supported.
 
+OpenAPI specification is compiled automatically based on the provided schemas and becomes available at `/api/json`. It can also be explored through Swagger UI that becomes available at `/api`.
+
 ## Development
 
 Run the build script to build the framework.
