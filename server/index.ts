@@ -72,7 +72,15 @@ export async function createServer() {
     // TODO: disallow apps without schemas in production build
     if (schema) {
       routeOptions.schema = {
-        body: schema,
+        // Use description as Swagger summary, since summary is visible
+        // even when the route is collapsed in the UI
+        summary: schema.description as string,
+        body: {
+          ...schema,
+          // Mix examples into the schema so they become accessible
+          // in the Swagger UI
+          examples: Object.values(examples),
+        },
       };
     }
 
@@ -101,20 +109,31 @@ export async function createServer() {
 
       // GET /api/{name}/examples/{example} -> render a preview page
       // with a predefined example body
-      app.get(`/api/${name}/examples/${exampleName}`, async (_, reply) => {
-        const ssrComponent = await viteSsr.ssrLoadModule(entry, {
-          fixStacktrace: true,
-        });
-        const { html, assets } = renderApp(
-          appEntry,
-          ssrComponent.default,
-          example as Record<string, unknown>
-        );
+      const exampleRoute = `/api/${name}/examples/${exampleName}`;
+      app.get(
+        exampleRoute,
+        {
+          schema: {
+            // Add a clickable link to the example route in route's Swagger
+            // description so it's easier to navigate to
+            description: `Open sandbox: [${exampleRoute}](${exampleRoute})`,
+          },
+        },
+        async (_, reply) => {
+          const ssrComponent = await viteSsr.ssrLoadModule(entry, {
+            fixStacktrace: true,
+          });
+          const { html, assets } = renderApp(
+            appEntry,
+            ssrComponent.default,
+            example as Record<string, unknown>
+          );
 
-        reply.type('text/html');
+          reply.type('text/html');
 
-        return renderPreviewPage(html, assets);
-      });
+          return renderPreviewPage(html, assets);
+        }
+      );
     }
   }
 
