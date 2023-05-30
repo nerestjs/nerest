@@ -37,9 +37,10 @@ export async function createServer() {
       rollupOptions: {
         input: '/node_modules/@nerest/nerest/client/index.ts',
         output: {
-          entryFileNames: `assets/[name].js`,
-          chunkFileNames: `assets/[name].js`,
-          assetFileNames: `assets/[name].[ext]`,
+          dir: 'build',
+          entryFileNames: `client/assets/[name].js`,
+          chunkFileNames: `client/assets/[name].js`,
+          assetFileNames: `client/assets/[name].[ext]`,
         },
       },
     },
@@ -139,7 +140,7 @@ export async function createServer() {
 
   // TODO: only do this locally, load from CDN in production
   await app.register(fastifyStatic, {
-    root: path.join(root, 'dist'),
+    root: path.join(root, 'build'),
     // TODO: maybe use @fastify/cors instead
     setHeaders(res: ServerResponse) {
       res.setHeader('Access-Control-Allow-Origin', '*');

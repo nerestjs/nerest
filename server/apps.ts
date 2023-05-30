@@ -58,7 +58,7 @@ async function loadApp(
 // for use with SSR
 async function loadManifest(root: string) {
   // TODO: error handling
-  const manifestPath = path.join(root, 'dist', 'manifest.json');
+  const manifestPath = path.join(root, 'build', 'manifest.json');
   const manifestData = await fs.readFile(manifestPath, { encoding: 'utf8' });
   return JSON.parse(manifestData);
 }
