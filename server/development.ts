@@ -1,4 +1,4 @@
-// This is the nerest server entrypoint
+// This is the nerest development server entrypoint
 import path from 'path';
 import type { ServerResponse } from 'http';
 
@@ -16,9 +16,7 @@ import { renderPreviewPage } from './parts/preview';
 import { validator } from './parts/validator';
 import { setupSwagger } from './parts/swagger';
 
-// TODO: this turned out to be a dev server, production server
-// will most likely be implemented separately
-export async function createServer() {
+export async function createDevelopmentServer() {
   const root = process.cwd();
 
   // TODO: move build config into a separate file
