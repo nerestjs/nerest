@@ -12,7 +12,9 @@ npm i --save @nerest/nerest react react-dom
 
 ## Points of Interest
 
-- SSR server entry: [server/index.ts](server/index.ts)
+- SSR server entry:
+  - Development: [server/development.ts](server/development.ts)
+  - Production: [server/production.ts](server/production.ts)
 - Hydrating client entry: [client/index.ts](client/index.ts)
 - CLI entry: [bin/index.ts](bin/index.ts)
 
