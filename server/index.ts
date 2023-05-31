@@ -10,11 +10,11 @@ import type { RouteShorthandOptions } from 'fastify';
 import fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 
-import { loadApps } from './apps';
-import { renderApp } from './render';
-import { renderPreviewPage } from './preview';
-import { validator } from './validator';
-import { setupSwagger } from './swagger';
+import { loadApps } from './parts/apps';
+import { renderApp } from './parts/render';
+import { renderPreviewPage } from './parts/preview';
+import { validator } from './parts/validator';
+import { setupSwagger } from './parts/swagger';
 
 // TODO: this turned out to be a dev server, production server
 // will most likely be implemented separately

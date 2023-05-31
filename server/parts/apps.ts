@@ -2,9 +2,9 @@ import path from 'path';
 import fs from 'fs/promises';
 import type { Manifest } from 'vite';
 
-import { loadAppAssets } from './loaders/assets';
-import { loadAppExamples } from './loaders/examples';
-import { loadAppSchema } from './loaders/schema';
+import { loadAppAssets } from '../loaders/assets';
+import { loadAppExamples } from '../loaders/examples';
+import { loadAppSchema } from '../loaders/schema';
 
 export type AppEntry = {
   name: string;
