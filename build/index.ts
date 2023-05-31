@@ -25,7 +25,11 @@ export async function buildMicroFrontend() {
       },
     },
   };
+
   await vite.build(clientConfig);
 
   // TODO: Build server using the client manifest
+  // 1. Pre-build: collect schemas and examples, compile them in a single file (?)
+  // 2. Server entry: glob import app index files, read schemas and examples from pre-built file
+  // 3. Write the server bundle into the build directory
 }

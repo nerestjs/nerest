@@ -44,6 +44,11 @@ export async function createServer() {
         },
       },
     },
+    // TODO: this doesn't seem to work without the index.html file entry and
+    // produces warnings in dev mode. look into this maybe
+    optimizeDeps: {
+      disabled: true,
+    },
   };
 
   // Build the clientside assets and watch for changes
