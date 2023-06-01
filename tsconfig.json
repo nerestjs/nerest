@@ -13,5 +13,8 @@
     "moduleResolution": "node",
     "jsx": "react"
   },
-  "include": ["server", "bin"]
+  // TODO: figure out how to setup includes and excludes correctly and in less
+  // confusing way. Vite entries do not need to be compiled by tsc ahead of time
+  "include": ["server", "build", "bin"],
+  "exclude": ["server/production.ts"]
 }

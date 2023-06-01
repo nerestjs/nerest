@@ -26,10 +26,28 @@ export async function buildMicroFrontend() {
     },
   };
 
+  console.log('Producing production client build...');
   await vite.build(clientConfig);
 
-  // TODO: Build server using the client manifest
-  // 1. Pre-build: collect schemas and examples, compile them in a single file (?)
-  // 2. Server entry: glob import app index files, read schemas and examples from pre-built file
-  // 3. Write the server bundle into the build directory
+  // Build server using the client manifest
+  const serverConfig: InlineConfig = {
+    root,
+    appType: 'custom',
+    build: {
+      emptyOutDir: false,
+      modulePreload: false,
+      // This is an important setting for producing a server build
+      ssr: true,
+      rollupOptions: {
+        input: '/node_modules/@nerest/nerest/server/production.ts',
+        output: {
+          dir: 'build',
+          entryFileNames: `server.mjs`,
+        },
+      },
+    },
+  };
+
+  console.log('Producing production server build...');
+  await vite.build(serverConfig);
 }
