@@ -16,7 +16,7 @@ import { renderPreviewPage } from './parts/preview';
 import { validator } from './parts/validator';
 import { setupSwagger } from './parts/swagger';
 
-export async function createDevelopmentServer() {
+export async function runDevelopmentServer() {
   const root = process.cwd();
 
   // TODO: move build config into a separate file
@@ -96,8 +96,11 @@ export async function createDevelopmentServer() {
         fixStacktrace: true,
       });
       return renderApp(
-        appEntry,
-        ssrComponent.default,
+        {
+          name,
+          assets: appEntry.assets,
+          component: ssrComponent.default,
+        },
         request.body as Record<string, unknown>
       );
     });
@@ -128,8 +131,11 @@ export async function createDevelopmentServer() {
             fixStacktrace: true,
           });
           const { html, assets } = renderApp(
-            appEntry,
-            ssrComponent.default,
+            {
+              name,
+              assets: appEntry.assets,
+              component: ssrComponent.default,
+            },
             example as Record<string, unknown>
           );
 
@@ -155,7 +161,13 @@ export async function createDevelopmentServer() {
     },
   });
 
-  return { app };
+  // TODO: remove hardcoded port
+  await app.listen({
+    host: '0.0.0.0',
+    port: 3000,
+  });
+
+  console.log('Nerest is listening on 0.0.0.0:3000');
 }
 
 // TODO: this should probably be moved from here

@@ -2,15 +2,17 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { nanoid } from 'nanoid';
 
-import type { AppEntry } from './apps';
+type RenderProps = {
+  name: string;
+  assets: string[];
+  component: React.ComponentType;
+};
 
 export function renderApp(
-  appEntry: AppEntry,
-  appComponent: React.ComponentType,
+  { name, assets, component }: RenderProps,
   props: Record<string, unknown> = {}
 ) {
-  const { name, assets } = appEntry;
-  const html = renderSsrComponent(name, appComponent, props);
+  const html = renderSsrComponent(name, component, props);
   return { html, assets };
 }
 

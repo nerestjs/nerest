@@ -5,6 +5,7 @@ import type { Manifest } from 'vite';
 import { loadAppAssets } from '../loaders/assets';
 import { loadAppExamples } from '../loaders/examples';
 import { loadAppSchema } from '../loaders/schema';
+import { loadAppManifest } from '../loaders/manifest';
 
 export type AppEntry = {
   name: string;
@@ -20,7 +21,7 @@ export type AppEntry = {
 // examples -> /apps/{name}/examples/{example}.json
 export async function loadApps(root: string) {
   const appsRoot = path.join(root, 'apps');
-  const manifest = await loadManifest(root);
+  const manifest = await loadAppManifest(root);
 
   const appsDirs = (await fs.readdir(appsRoot, { withFileTypes: true }))
     .filter((d) => d.isDirectory())
@@ -52,13 +53,4 @@ async function loadApp(
       schema: await loadAppSchema(appRoot),
     },
   ];
-}
-
-// Manifest is used to provide assets list for every app
-// for use with SSR
-async function loadManifest(root: string) {
-  // TODO: error handling
-  const manifestPath = path.join(root, 'build', 'manifest.json');
-  const manifestData = await fs.readFile(manifestPath, { encoding: 'utf8' });
-  return JSON.parse(manifestData);
 }
