@@ -5,6 +5,7 @@ import { loadAppManifest } from './loaders/manifest';
 import { loadAppAssets } from './loaders/assets';
 
 import { renderApp } from './parts/render';
+import { setupSwagger } from './parts/swagger';
 
 async function runProductionServer() {
   const apps = import.meta.glob('/apps/*/index.tsx', {
@@ -17,8 +18,7 @@ async function runProductionServer() {
 
   const app = fastify();
 
-  // TODO: figure out how to import swagger so it doesn't break the build with npm link
-  // await setupSwagger(app);
+  await setupSwagger(app);
 
   for (const [pathname, component] of Object.entries(apps)) {
     const name = pathname.split('/')[2];
