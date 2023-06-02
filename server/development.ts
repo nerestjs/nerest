@@ -72,8 +72,7 @@ export async function runDevelopmentServer() {
 
     const routeOptions: RouteShorthandOptions = {};
 
-    // TODO: report error if schema is missing, unless this app is client-only.
-    // TODO: disallow apps without schemas in production build
+    // TODO: report error if schema is missing, unless this app is client-only
     if (schema) {
       routeOptions.schema = {
         // Use description as Swagger summary, since summary is visible
