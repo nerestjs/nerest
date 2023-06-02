@@ -1,5 +1,10 @@
+import path from 'path';
+import fs from 'fs/promises';
+
 import vite from 'vite';
 import type { InlineConfig } from 'vite';
+
+import { loadApps } from '../server/parts/apps';
 
 export async function buildMicroFrontend() {
   const root = process.cwd();
@@ -29,6 +34,9 @@ export async function buildMicroFrontend() {
   console.log('Producing production client build...');
   await vite.build(clientConfig);
 
+  console.log('Producing Nerest manifest file...');
+  await buildAppsManifest(root);
+
   // Build server using the client manifest
   const serverConfig: InlineConfig = {
     root,
@@ -50,4 +58,13 @@ export async function buildMicroFrontend() {
 
   console.log('Producing production server build...');
   await vite.build(serverConfig);
+}
+
+async function buildAppsManifest(root: string) {
+  const apps = await loadApps(root);
+  await fs.writeFile(
+    path.join(root, 'build/nerest-manifest.json'),
+    JSON.stringify(apps),
+    { encoding: 'utf-8' }
+  );
 }
