@@ -43,4 +43,4 @@ npm install
 npm run build
 ```
 
-Use [nerest-harness](https://github.com/nerestjs/harness) with `npm link` to test changes locally.
+Use [nerest-harness](https://github.com/nerestjs/harness) to test changes locally.
