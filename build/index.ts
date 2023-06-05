@@ -8,6 +8,16 @@ import { loadApps } from '../server/parts/apps';
 
 export async function buildMicroFrontend() {
   const root = process.cwd();
+  const staticPath = process.env.NEREST_STATIC_PATH;
+
+  // TODO: The path where the client files are deployed is built-in during
+  // the initial build, but the client scripts aren't using it, so maybe it should
+  // be a runtime env variable for the server instead?
+  if (!staticPath) {
+    throw new Error(
+      'NEREST_STATIC_PATH environment variable is not set but is required for the production build'
+    );
+  }
 
   // Build client
   // TODO: extract shared parts between build/index.ts and server/index.ts
@@ -15,6 +25,7 @@ export async function buildMicroFrontend() {
   const clientConfig: InlineConfig = {
     root,
     appType: 'custom',
+    envPrefix: 'NEREST_',
     build: {
       // Manifest is needed to report used assets in SSR handles
       manifest: true,
@@ -35,12 +46,13 @@ export async function buildMicroFrontend() {
   await vite.build(clientConfig);
 
   console.log('Producing Nerest manifest file...');
-  await buildAppsManifest(root);
+  await buildAppsManifest(root, staticPath);
 
   // Build server using the client manifest
   const serverConfig: InlineConfig = {
     root,
     appType: 'custom',
+    envPrefix: 'NEREST_',
     build: {
       emptyOutDir: false,
       modulePreload: false,
@@ -60,8 +72,8 @@ export async function buildMicroFrontend() {
   await vite.build(serverConfig);
 }
 
-async function buildAppsManifest(root: string) {
-  const apps = await loadApps(root);
+async function buildAppsManifest(root: string, staticPath: string) {
+  const apps = await loadApps(root, staticPath);
   await fs.writeFile(
     path.join(root, 'build/nerest-manifest.json'),
     JSON.stringify(apps),

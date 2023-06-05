@@ -19,7 +19,7 @@ export type AppEntry = {
 // Build the record of the available apps by convention
 // apps -> /apps/{name}/index.tsx
 // examples -> /apps/{name}/examples/{example}.json
-export async function loadApps(root: string) {
+export async function loadApps(root: string, deployedStaticPath: string) {
   const appsRoot = path.join(root, 'apps');
   const manifest = await loadAppManifest(root);
 
@@ -29,7 +29,7 @@ export async function loadApps(root: string) {
 
   const apps: Array<[name: string, entry: AppEntry]> = [];
   for (const appDir of appsDirs) {
-    apps.push(await loadApp(appsRoot, appDir, manifest));
+    apps.push(await loadApp(appsRoot, appDir, manifest, deployedStaticPath));
   }
 
   return Object.fromEntries(apps);
@@ -38,7 +38,8 @@ export async function loadApps(root: string) {
 async function loadApp(
   appsRoot: string,
   name: string,
-  manifest: Manifest
+  manifest: Manifest,
+  deployedStaticPath: string
 ): Promise<[name: string, entry: AppEntry]> {
   // TODO: report problems with loading entries, assets and/or examples
   const appRoot = path.join(appsRoot, name);
@@ -48,7 +49,7 @@ async function loadApp(
       name,
       root: appRoot,
       entry: path.join(appRoot, 'index.tsx'),
-      assets: loadAppAssets(manifest, name),
+      assets: loadAppAssets(name, manifest, deployedStaticPath),
       examples: await loadAppExamples(appRoot),
       schema: await loadAppSchema(appRoot),
     },

@@ -25,6 +25,7 @@ export async function runDevelopmentServer() {
   const config: InlineConfig = {
     root,
     appType: 'custom',
+    envPrefix: 'NEREST_',
     server: { middlewareMode: true },
     build: {
       // Manifest is needed to report used assets in SSR handles
@@ -54,7 +55,8 @@ export async function runDevelopmentServer() {
   await startClientBuildWatcher(config);
 
   // Load app entries following the `apps/{name}/index.tsx` convention
-  const apps = await loadApps(root);
+  // TODO: remove hardcoded port
+  const apps = await loadApps(root, 'http://0.0.0.0:3000/');
 
   // Start vite server that will be rendering SSR components
   const viteSsr = await vite.createServer(config);
