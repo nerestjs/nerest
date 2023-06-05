@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 // All executions of `nerest <command>` get routed through here
+import 'dotenv/config';
+
 import { build } from './build';
 import { watch } from './watch';
 
