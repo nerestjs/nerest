@@ -17,6 +17,7 @@ npm i --save @nerest/nerest react react-dom
   - Production: [server/production.ts](server/production.ts)
 - Hydrating client entry: [client/index.ts](client/index.ts)
 - CLI entry: [bin/index.ts](bin/index.ts)
+- Production build script: [build/index.ts](build/index.ts)
 
 ## Conventions
 
@@ -33,6 +34,28 @@ The app directory may contain an `examples` subdirectory with example JSON files
 The app directory should contain a `schema.json` file that describes the schema of a request body for this specific app in the [JSON Schema language](https://json-schema.org/). All requests sent to this app, and app examples from the `examples` subdirectory will be validated against this schema. `ajv` and `ajv-formats` are used for validation, so all JSON Schema features implemented by them are supported.
 
 OpenAPI specification is compiled automatically based on the provided schemas and becomes available at `/api/json`. It can also be explored through Swagger UI that becomes available at `/api`.
+
+## Configuration
+
+Different aspects of Nerest apps can be configured via environment variables, JSON configuration and runtime hooks written in TypeScript. Examples of all kinds of configuration can be viewed in the [nerest-harness](https://github.com/nerestjs/harness) repository.
+
+### Environment Variables
+
+#### Buildtime
+
+- `NEREST_STATIC_PATH` is required for production build and must contain the URL of where the client static assets will be deployed. It lets the server-side renderer return their paths in the assets field of the response.
+
+#### Runtime
+
+All environment variables prefixed with `NEREST_` will be bundled with your app during buildtime. You can access them in the code using the special `import.meta.env` object. For example, `import.meta.env.NEREST_SOMEVAR` will be statically replaced during buildtime with the value of this environment variable on the build machine.
+
+### JSON Configuration
+
+TODO
+
+### Runtime Hooks
+
+TODO
 
 ## Development
 
