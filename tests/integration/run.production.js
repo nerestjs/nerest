@@ -37,7 +37,6 @@ async function main() {
       'node_modules/.bin/vitest',
       [
         'run',
-        '--poolOptions.threads.singleThread',
         'tests/integration/suites/',
         '--exclude',
         'tests/integration/suites/browser.test.ts', // browser tests require a static server
