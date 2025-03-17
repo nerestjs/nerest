@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "HeaderProps",
+  "description": "Renders website's header with countdown",
+  "type": "object",
+  "properties": {
+    "countdownSeconds": { "type": "number" },
+    "affirmation": { "type": "string" }
+  },
+  "required": ["countdownSeconds"]
+}

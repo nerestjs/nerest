@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "Build Configuration",
+  "description": "Build configuration placed as nerest/build.json in the root of the application.",
+  "type": "object",
+  "properties": {
+    "excludes": {
+      "description": "Excludes modules from the client build and replaces them with empty modules instead.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "externals": {
+      "description": "Excludes modules from the client build and maps them to globally available constants instead.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "postcss": {
+      "description": "Additional PostCSS configuration. Nerest uses the standard vite PostCSS configuration by default.",
+      "type": "object",
+      "properties": {
+        "plugins": {
+          "description": "List packages and options of PostCSS plugins to use. They will be added to the default plugin list.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "clientSideEffects": {
+      "description": "List of names of apps that have client side-effects, for example have their own self-initialization code that runs on import. Their entries will be loaded when hydration starts to run side-effect code.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

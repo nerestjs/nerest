@@ -1,0 +1,26 @@
+{
+  "name": "nerest-integration-harness",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nerest build",
+    "prepare": "relative-deps && chmod +x node_modules/.bin/nerest",
+    "typegen": "nerest typegen",
+    "watch": "nerest watch"
+  },
+  "dependencies": {
+    "@nerest/nerest": "latest",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@tsconfig/vite-react": "^3.4.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "relative-deps": "^1.0.7",
+    "typescript": "^5.8.2"
+  },
+  "relativeDependencies": {
+    "@nerest/nerest": "../../.."
+  }
+}
