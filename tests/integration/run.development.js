@@ -11,7 +11,7 @@ async function main() {
 
   // Install Playwright browsers
   console.log('Installing Playwright browsers...');
-  await execa('npx', ['playwright', 'install', 'chromium', '--with-deps'], {
+  await execa('npx', ['playwright', 'install', 'webkit', '--with-deps'], {
     stdio: 'inherit',
   });
 

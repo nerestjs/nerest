@@ -1,12 +1,12 @@
 import { describe, it, beforeAll, afterAll, expect } from 'vitest';
-import { type Browser, chromium } from '@playwright/test';
+import { type Browser, webkit } from '@playwright/test';
 import { BASE_URL } from '../utils.js';
 
 describe('In-browser functionality', () => {
   let browser: Browser;
 
   beforeAll(async () => {
-    browser = await chromium.launch({ headless: true });
+    browser = await webkit.launch({ headless: true });
   });
 
   afterAll(async () => {
