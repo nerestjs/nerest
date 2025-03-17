@@ -10,15 +10,10 @@ async function main() {
   });
 
   // Install Playwright browsers
-  // TODO: Playwright tests hang in Devplatform CI, disable them for now
-  if (!process.env.GITLAB_CI) {
-    console.log('Installing Playwright browsers...');
-    await execa(
-      'npx',
-      ['playwright', 'install', 'chromium', '--with-deps', '--no-shell'],
-      { stdio: 'inherit' }
-    );
-  }
+  console.log('Installing Playwright browsers...');
+  await execa('npx', ['playwright', 'install', 'chromium', '--with-deps'], {
+    stdio: 'inherit',
+  });
 
   // Start the dev server
   console.log('Starting development server...');
@@ -38,14 +33,7 @@ async function main() {
     console.log('Running integration tests...');
     await execa(
       'node_modules/.bin/vitest',
-      [
-        'run',
-        'tests/integration/suites/',
-        // TODO: Playwright tests hang in Devplatform CI, disable them for now
-        ...(process.env.GITLAB_CI
-          ? ['--exclude', 'tests/integration/suites/browser.test.ts']
-          : []),
-      ],
+      ['run', 'tests/integration/suites/'],
       { stdio: 'inherit' }
     );
   } finally {

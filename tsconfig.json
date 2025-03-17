@@ -9,6 +9,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-
   "include": ["bin", "build", "client", "schemas", "server", "vite-env.d.ts"]
 }
