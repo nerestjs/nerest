@@ -24,7 +24,6 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json -d",
-    "docs": "scripts/docs.sh",
     "lint": "eslint --ext .ts .",
     "prepare": "simple-git-hooks",
     "test": "npm run test:module && npm run test:integration:dev && npm run test:integration:prod",

@@ -7,6 +7,10 @@
 - Write commit messages and PR titles that follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) specification
 - Write commits, comments and documentation in English
 
+## Documentation
+
+Keep documentation [in the docs repo](https://github.com/nerestjs/docs) up to date.
+
 ## Publishing
 
 To publish a new version, [create a new release](https://github.com/nerestjs/nerest/releases/new) on GitHub. The release will automatically trigger a new version to be published to npm.

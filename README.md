@@ -2,9 +2,11 @@
 
 Nerest is an opinionated micro frontend framework/stack for building SSR applications with TypeScript, Fastify, JSON Schema and React. It is available as a single `@nerest/nerest` npm package.
 
+[View current documentation](https://nerestjs.github.io/docs/)
+
 ## Quick Start
 
-See [nerest-harness](https://github.com/nerestjs/harness) for a comprehensive example of a Nerest micro frontend.
+[Follow the tutorial](https://nerestjs.github.io/docs/tutorial/) to build your first Nerest micro frontend step-by-step.
 
 ## Conventions
 
@@ -49,7 +51,7 @@ The exported function may be async, in which case Nerest will wait for the Promi
 
 ## Configuration
 
-Different aspects of Nerest apps can be configured via environment variables, JSON configuration and runtime hooks written in TypeScript. Examples of all kinds of configuration can be viewed in the [nerest-harness](https://github.com/nerestjs/harness) repository.
+Different aspects of Nerest apps can be configured via environment variables, JSON configuration and runtime hooks written in TypeScript.
 
 ### Environment Variables
 
