@@ -33,8 +33,12 @@ async function main() {
     console.log('Running integration tests...');
     await execa(
       'node_modules/.bin/vitest',
-      ['run', 'tests/integration/suites/'],
-      { stdio: 'inherit', env: { DEBUG: 'pw:api,pw:browser,vitest:*' } }
+      [
+        'run',
+        '--poolOptions.threads.singleThread',
+        'tests/integration/suites/',
+      ],
+      { stdio: 'inherit' }
     );
   } finally {
     server.kill();
