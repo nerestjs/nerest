@@ -4,12 +4,16 @@
 
 - Run tests with `npm run test`
 - Write new tests for your changes. For new functionality, add it to the [harness](tests/integration/harness) and cover with integration tests
-- Write commit messages that follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) specification
+- Write commit messages and PR titles that follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) specification
 - Write commits, comments and documentation in English
 
 ## Publishing
 
-New version number is determined by [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog) based on the commit history.
+To publish a new version, [create a new release](https://github.com/nerestjs/nerest/releases/new) on GitHub. The release will automatically trigger a new version to be published to npm.
+
+- Click "Generate release notes" to pull the list of all merged PRs into the changelog
+- Put a release tag in the title, following semantic versioning, based on the merged PRs
+- Click "Publish release"
 
 ## Issues
 
