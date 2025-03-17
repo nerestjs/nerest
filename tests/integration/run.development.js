@@ -11,7 +11,7 @@ async function main() {
 
   // Install Playwright browsers
   console.log('Installing Playwright browsers...');
-  await execa('npx', ['playwright', 'install', 'webkit', '--with-deps'], {
+  await execa('npx', ['playwright', 'install', 'chromium', '--with-deps'], {
     stdio: 'inherit',
   });
 
@@ -34,7 +34,7 @@ async function main() {
     await execa(
       'node_modules/.bin/vitest',
       ['run', 'tests/integration/suites/'],
-      { stdio: 'inherit' }
+      { stdio: 'inherit', env: { DEBUG: 'pw:api,pw:browser,vitest:*' } }
     );
   } finally {
     server.kill();
