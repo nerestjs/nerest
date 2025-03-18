@@ -6,7 +6,7 @@ Nerest is an opinionated micro frontend framework/stack for building SSR applica
 
 ## Quick Start
 
-[Follow the tutorial](https://nerestjs.github.io/docs/tutorial/) to build your first Nerest micro frontend step-by-step.
+[Follow the tutorial](https://nerestjs.github.io/docs/tutorial/) to build your first Nerest micro frontend step-by-step, or clone and run [the complete version](https://github.com/nerestjs/tutorial) of that micro frontend locally.
 
 ## Conventions
 
@@ -145,7 +145,7 @@ This runtime hook can be used to adjust fastify settings, register additional pl
 
 #### Logger
 
-Nerest uses the default server-side fastify logger](https://fastify.dev/docs/latest/Reference/Logging/#logging), enabled by default. To configure or disable it, export a `logger` function from the `nerest/runtime.ts` module. This function will be called on server start, and its return value will be used as the logger configuration for Fastify.
+Nerest uses the [default server-side fastify logger](https://fastify.dev/docs/latest/Reference/Logging/#logging), enabled by default. To configure or disable it, export a `logger` function from the `nerest/runtime.ts` module. This function will be called on server start, and its return value will be used as the logger configuration for Fastify.
 
 ```typescript
 import type { FastifyServerOptions } from 'fastify';
