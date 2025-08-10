@@ -1,11 +1,10 @@
 import path from 'path';
 import fg from 'fast-glob';
 import type { Manifest as ViteManifest } from 'vite';
-import type { JSONSchema } from '@apidevtools/json-schema-ref-parser';
 
 import { loadAppAssets } from './assets.js';
 import { loadAppExamples } from './examples.js';
-import { loadAppSchema } from './schema.js';
+import { loadAppSchema, type JSONSchema } from './schema.js';
 import { loadViteManifest } from './manifest.js';
 
 export type AppEntry = {
