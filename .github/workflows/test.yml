@@ -27,9 +27,6 @@ jobs:
   integration-test:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    # TODO: Integration tests hang in CI
-    # https://github.com/nerestjs/nerest/issues/4
-    if: false
     steps:
       - name: Checkout commit
         uses: actions/checkout@v4

@@ -22,6 +22,7 @@ async function main() {
   const server = execa('node', ['build/server.mjs'], {
     cwd: HARNESS_DIR,
     env: { ENABLE_K8S_PROBES: 'true' },
+    forceKillAfterDelay: 2000,
   });
   server.stdout?.pipe(process.stdout);
   server.stderr?.pipe(process.stderr);
@@ -45,6 +46,9 @@ async function main() {
     );
   } finally {
     server.kill();
+    try {
+      await server;
+    } catch {}
   }
 }
 
