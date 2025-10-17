@@ -26,9 +26,5 @@ export interface BuildConfiguration {
     };
     [k: string]: unknown;
   };
-  /**
-   * List of names of apps that have client side-effects, for example have their own self-initialization code that runs on import. Their entries will be loaded when hydration starts to run side-effect code.
-   */
-  clientSideEffects?: string[];
   [k: string]: unknown;
 }

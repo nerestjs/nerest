@@ -121,14 +121,6 @@ Include specified PostCSS plugins in the build by providing their full package n
 
 In the above example, `postcss-extend` is added to vite's PostCSS configuration with default options, enabling the use of `@extend` rules in CSS code. `postcss-short` is added with specific options provided.
 
-#### clientSideEffects: `string[]`
-
-List of names of apps that have client side-effects, for example have their own self-initialization code that runs on import. Their entries will be loaded when hydration starts to run side-effect code.
-
-```
-"clientSideEffects": ["foo", "bar"]
-```
-
 ### Runtime
 
 If the module `nerest/runtime.ts` exists in the micro frontend's root directory and exports a default function, it will be executed when the server starts. The Fastify app instance will be passed as the function's only argument. Example of `nerest/runtime.ts`:

@@ -46,11 +46,3 @@ if (document.readyState !== 'complete') {
 } else {
   runHydration();
 }
-
-// Entries might be self-initializing (e.g. client-only apps) or have other
-// side effects. In that case we have to load them eagerly, so that their
-// initialization code can run, even if there is nothing to hydrate.
-const clientSideEffects: string[] | undefined = JSON.parse(
-  import.meta.env.NEREST_CLIENT_SIDE_EFFECTS
-);
-clientSideEffects?.forEach((name) => modules[`/apps/${name}/index.tsx`]?.());
