@@ -18,9 +18,6 @@ export async function viteConfigShared({
 }: BuildArgs): Promise<InlineConfig> {
   // This will be available to client scripts with import.meta.env
   process.env.NEREST_PROJECT_NAME = project.name;
-  process.env.NEREST_CLIENT_SIDE_EFFECTS = JSON.stringify(
-    buildConfig?.clientSideEffects ?? []
-  );
 
   return {
     root,
