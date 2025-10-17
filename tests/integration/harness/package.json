@@ -10,15 +10,15 @@
   },
   "dependencies": {
     "@nerest/nerest": "latest",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@tsconfig/vite-react": "^6.3.6",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
+    "@tsconfig/vite-react": "^7.0.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
     "relative-deps": "^1.0.7",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   },
   "relativeDependencies": {
     "@nerest/nerest": "../../.."
