@@ -49,7 +49,7 @@
     ]
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^14.2.1",
+    "@apidevtools/json-schema-ref-parser": "^15.1.3",
     "@fastify/middie": "^9.0.3",
     "@fastify/static": "^8.2.0",
     "@fastify/swagger": "^9.5.2",
