@@ -48,8 +48,8 @@ describe('runRuntimeHook', () => {
     );
 
     expect(mockLogger.log.fatal).toHaveBeenCalledWith(
-      'Failed to execute runtime hook',
-      error
+      error,
+      'Failed to execute runtime hook'
     );
     expect(mockProcessExit).toHaveBeenCalledWith(1);
   });
