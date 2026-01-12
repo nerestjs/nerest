@@ -23,7 +23,7 @@ export async function runRuntimeHook(
     try {
       await module.default(app);
     } catch (e) {
-      app.log.fatal('Failed to execute runtime hook', e);
+      app.log.fatal(e, 'Failed to execute runtime hook');
       process.exit(1);
     }
   } else if (module) {

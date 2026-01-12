@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@nerest/nerest": "latest",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
-    "@tsconfig/vite-react": "^7.0.1",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
+    "@tsconfig/vite-react": "^7.0.2",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
     "relative-deps": "^1.0.7",
     "typescript": "^5.9.3"
   },
