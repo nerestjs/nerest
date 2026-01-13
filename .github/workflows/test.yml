@@ -27,6 +27,9 @@ jobs:
   integration-test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      matrix:
+        environment: [dev, prod]
     steps:
       - name: Checkout commit
         uses: actions/checkout@v4
@@ -40,10 +43,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install chromium --with-deps
 
-      - name: Run dev integration tests
-        run: npm run test:integration:dev
-
-      - name: Run prod integration tests
-        run: npm run test:integration:prod
+      - name: Run ${{ matrix.environment }} integration tests
+        run: npm run test:integration:${{ matrix.environment }}
