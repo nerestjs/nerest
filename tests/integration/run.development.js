@@ -9,12 +9,6 @@ async function main() {
     stdio: 'inherit',
   });
 
-  // Install Playwright browsers
-  console.log('Installing Playwright browsers...');
-  await execa('npx', ['playwright', 'install', 'chromium', '--with-deps'], {
-    stdio: 'inherit',
-  });
-
   // Start the dev server
   console.log('Starting development server...');
   const server = execa('npm', ['run', 'watch'], {
