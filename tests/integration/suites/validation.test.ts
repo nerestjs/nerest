@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BASE_URL } from '../utils.js';
+import { BASE_URL } from '../constants.js';
 
 describe('Schema validation', () => {
   it('should reject request with missing required field', async () => {

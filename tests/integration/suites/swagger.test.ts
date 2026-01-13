@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BASE_URL } from '../utils.js';
+import { BASE_URL } from '../constants.js';
 
 describe('Swagger UI', () => {
   it('should serve Swagger UI at /api', async () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BASE_URL } from '../utils.js';
+import { BASE_URL } from '../constants.js';
 
 describe('Routes', () => {
   it('should render header app via POST request', async () => {
@@ -29,7 +29,9 @@ describe('Routes', () => {
     expect(result.html).toContain('<script type="application/json"');
 
     // Check assets
-    expect(result.assets.some((asset) => asset.endsWith('.js'))).toBe(true);
+    expect(result.assets.some((asset: string) => asset.endsWith('.js'))).toBe(
+      true
+    );
   });
 
   it('should render header example page via GET request', async () => {

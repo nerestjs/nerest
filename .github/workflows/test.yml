@@ -26,10 +26,10 @@ jobs:
 
   integration-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
-    # TODO: Integration tests hang in CI
-    # https://github.com/nerestjs/nerest/issues/4
-    if: false
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        environment: [dev, prod]
     steps:
       - name: Checkout commit
         uses: actions/checkout@v4
@@ -42,8 +42,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run dev integration tests
-        run: npm run test:integration:dev
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
 
-      - name: Run prod integration tests
-        run: npm run test:integration:prod
+      - name: Run ${{ matrix.environment }} integration tests
+        run: npm run test:integration:${{ matrix.environment }}
