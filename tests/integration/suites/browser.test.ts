@@ -1,6 +1,6 @@
 import { describe, it, beforeAll, afterAll, expect } from 'vitest';
 import { type Browser, chromium } from '@playwright/test';
-import { BASE_URL } from '../utils.js';
+import { BASE_URL } from '../constants.js';
 
 describe('In-browser functionality', () => {
   let browser: Browser;
