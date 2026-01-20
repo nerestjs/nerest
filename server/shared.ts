@@ -35,8 +35,9 @@ export async function createServer(options: ServerOptions) {
 
   const app = fastify({
     logger: (await runLoggerHook(loadRuntimeHook)) ?? true,
-    ignoreTrailingSlash: true,
-    useSemicolonDelimiter: false,
+    routerOptions: {
+      ignoreTrailingSlash: true,
+    },
     // JSON parsing can take a long time and blocks the event loop,
     // so we need to limit the size of the body. 10MB is a good compromise
     // baseline that was chosen by experimenting with real world usage
