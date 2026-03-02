@@ -1,4 +1,5 @@
 import type { InlineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 import type { BuildArgs } from './shared.js';
 import { viteConfigShared } from './shared.js';
@@ -24,6 +25,7 @@ export async function viteConfigDevelopmentClient(
         },
       },
     },
+    plugins: [react()],
     customLogger: logger,
   };
 }
@@ -51,6 +53,7 @@ export async function viteConfigDevelopmentServer(
       noDiscovery: true,
       include: [],
     },
+    plugins: [react()],
     customLogger: logger,
   };
 }
