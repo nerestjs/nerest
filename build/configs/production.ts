@@ -1,5 +1,6 @@
 import type { InlineConfig } from 'vite';
 import { viteExternalsPlugin } from 'vite-plugin-externals';
+import react from '@vitejs/plugin-react';
 
 import type { BuildArgs } from './shared.js';
 import { viteConfigShared } from './shared.js';
@@ -31,6 +32,7 @@ export async function viteConfigProductionClient(
     plugins: [
       // externals - map buildConfig.externals packages to a global variable on window
       viteExternalsPlugin(args.buildConfig?.externals, { useWindow: false }),
+      react(),
     ],
   };
 }
@@ -55,5 +57,6 @@ export async function viteConfigProductionServer(
         },
       },
     },
+    plugins: [react()],
   };
 }
