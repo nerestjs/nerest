@@ -1,5 +1,4 @@
 import path from 'path';
-import fg from 'fast-glob';
 import type { Manifest as ViteManifest } from 'vite';
 import type { JSONSchema } from '@apidevtools/json-schema-ref-parser';
 
@@ -21,12 +20,12 @@ export type AppEntry = {
 // Build the record of the available apps by convention
 // apps -> /apps/{name}/index.tsx
 // examples -> /apps/{name}/examples/{example}.json
-export async function loadApps(root: string, deployedStaticPath: string) {
+export async function loadApps(
+  root: string,
+  appDirs: string[],
+  deployedStaticPath: string
+) {
   const manifest = await loadViteManifest(root);
-
-  const appBase = path.join(root, 'apps');
-  const appPattern = `${fg.convertPathToPattern(appBase)}/*`;
-  const appDirs = await fg.glob(appPattern, { onlyDirectories: true });
 
   const apps: Array<[name: string, entry: AppEntry]> = [];
   for (const appDir of appDirs) {

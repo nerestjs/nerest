@@ -1,5 +1,6 @@
 import type { InlineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 import type { BuildArgs } from './shared.js';
 import { viteConfigShared } from './shared.js';
@@ -16,7 +17,10 @@ export async function viteConfigDevelopmentClient(
       modulePreload: false,
       watch: {},
       rollupOptions: {
-        input: '/node_modules/@nerest/nerest/client/index.ts',
+        input: [
+          '/node_modules/@nerest/nerest/client/index.ts',
+          ...args.appDirectories.map((dir) => path.join(dir, 'index.tsx')),
+        ],
         output: {
           dir: 'build/client/assets',
           entryFileNames: `[name].js`,

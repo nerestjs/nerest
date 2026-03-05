@@ -12,6 +12,7 @@ import {
 } from '../build/configs/development.js';
 import { loadBuildConfig } from './loaders/build.js';
 import { loadApps } from './loaders/apps.js';
+import { loadAppDirectories } from './loaders/directories.js';
 import { loadProject } from './loaders/project.js';
 
 export async function runDevelopmentServer(port: number) {
@@ -30,6 +31,9 @@ export async function runDevelopmentServer(port: number) {
   // Load project meta details
   const project = await loadProject(root);
 
+  // Load app directories following the `apps/{name}` convention
+  const appDirectories = await loadAppDirectories(root);
+
   // Build the clientside assets and watch for changes
   await startClientBuildWatcher(
     await viteConfigDevelopmentClient({
@@ -37,6 +41,7 @@ export async function runDevelopmentServer(port: number) {
       base: staticPath,
       buildConfig,
       project,
+      appDirectories,
     })
   );
 
@@ -47,11 +52,12 @@ export async function runDevelopmentServer(port: number) {
       base: staticPath,
       buildConfig,
       project,
+      appDirectories,
     })
   );
 
   // Load app entries following the `apps/{name}/index.tsx` convention
-  const apps = await loadApps(root, staticPath);
+  const apps = await loadApps(root, appDirectories, staticPath);
 
   const app = await createServer({
     root,
