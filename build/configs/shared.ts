@@ -8,6 +8,7 @@ export type BuildArgs = {
   base: string;
   buildConfig: BuildConfiguration | undefined;
   project: Project;
+  appDirectories: string[];
 };
 
 export async function viteConfigShared({

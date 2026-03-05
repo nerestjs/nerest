@@ -5,6 +5,7 @@ import { build } from 'vite';
 
 import { loadBuildConfig } from '../server/loaders/build.js';
 import { loadApps } from '../server/loaders/apps.js';
+import { loadAppDirectories } from '../server/loaders/directories.js';
 import type { Project } from '../server/loaders/project.js';
 import { loadProject } from '../server/loaders/project.js';
 import {
@@ -22,19 +23,23 @@ export async function buildMicroFrontend() {
   // Read project meta info from package.json
   const project = await loadProject(root);
 
+  // Load app directories following the `apps/{name}` convention
+  const appDirectories = await loadAppDirectories(root);
+
   // Build client
   const clientViteConfig = await viteConfigProductionClient({
     root,
     base: staticPath,
     buildConfig,
     project,
+    appDirectories,
   });
   console.log('Producing production client build...');
   await build(clientViteConfig);
 
   // Create nerest-manifest.json that production server reads on startup
   console.log('Producing Nerest manifest file...');
-  await createNerestManifest(root, staticPath, project);
+  await createNerestManifest(root, appDirectories, staticPath, project);
 
   // Build server
   const serverViteConfig = await viteConfigProductionServer({
@@ -42,6 +47,7 @@ export async function buildMicroFrontend() {
     base: staticPath,
     buildConfig,
     project,
+    appDirectories,
   });
   console.log('Producing production server build...');
   await build(serverViteConfig);
@@ -49,10 +55,11 @@ export async function buildMicroFrontend() {
 
 async function createNerestManifest(
   root: string,
+  appDirectories: string[],
   staticPath: string,
   project: Project
 ) {
-  const apps = await loadApps(root, staticPath);
+  const apps = await loadApps(root, appDirectories, staticPath);
   await fs.writeFile(
     path.join(root, 'build/nerest-manifest.json'),
     JSON.stringify({ project, apps }),
