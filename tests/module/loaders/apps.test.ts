@@ -1,18 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
-import fg from 'fast-glob';
 import type { Manifest } from 'vite';
 import { loadApps } from '../../../server/loaders/apps.js';
 import { loadViteManifest } from '../../../server/loaders/manifest.js';
 import { loadAppAssets } from '../../../server/loaders/assets.js';
 import { loadAppExamples } from '../../../server/loaders/examples.js';
 import { loadAppSchema } from '../../../server/loaders/schema.js';
-
-vi.mock('fast-glob', () => ({
-  default: {
-    glob: vi.fn(),
-    convertPathToPattern: vi.fn((path) => path),
-  },
-}));
 
 vi.mock('../../../server/loaders/manifest.js');
 vi.mock('../../../server/loaders/assets.js');
@@ -29,20 +21,15 @@ describe('loadApps', () => {
     const mockSchema = null;
 
     vi.mocked(loadViteManifest).mockResolvedValue(mockManifest);
-    vi.mocked(fg.glob).mockResolvedValue([
-      '/root/apps/app1',
-      '/root/apps/app2',
-    ]);
     vi.mocked(loadAppAssets).mockReturnValue(mockAssets);
     vi.mocked(loadAppExamples).mockResolvedValue(mockExamples);
     vi.mocked(loadAppSchema).mockResolvedValue(mockSchema);
 
-    const apps = await loadApps('/root', 'http://localhost:3000/');
-
-    expect(fg.convertPathToPattern).toHaveBeenCalledWith('/root/apps');
-    expect(fg.glob).toHaveBeenCalledWith('/root/apps/*', {
-      onlyDirectories: true,
-    });
+    const apps = await loadApps(
+      '/root',
+      ['/root/apps/app1', '/root/apps/app2'],
+      'http://localhost:3000/'
+    );
 
     expect(loadAppAssets).toHaveBeenCalledWith(
       'app1',
