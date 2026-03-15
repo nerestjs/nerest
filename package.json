@@ -63,7 +63,7 @@
     "fastify": "^5.7.4",
     "fastify-graceful-shutdown": "^5.0.0",
     "json-schema-to-typescript": "^15.0.4",
-    "vite": "^7.3.1",
+    "vite": "^8.0.0",
     "vite-plugin-externals": "^0.6.2"
   },
   "devDependencies": {
