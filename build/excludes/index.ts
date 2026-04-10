@@ -1,5 +1,5 @@
 /**
- * Maps list of imports into a list of rollup aliases that resolve
+ * Maps list of imports into a list of rolldown aliases that resolve
  * into an empty module.
  */
 export function excludes(list: string[] | undefined) {

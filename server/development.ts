@@ -106,7 +106,7 @@ async function startClientBuildWatcher(config: InlineConfig) {
   const watcher = (await build(config)) as RolldownWatcher;
   return new Promise<void>((resolve) => {
     // We need to have a built manifest.json to provide assets
-    // links in SSR. We will wait for rollup to report when it
+    // links in SSR. We will wait for rolldown to report when it
     // has finished the build
     const listener = (ev: RolldownWatcherEvent) => {
       if (ev.code === 'END') {
