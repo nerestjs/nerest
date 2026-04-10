@@ -17,8 +17,8 @@ export default logger;
 const ignoredErrors = [
   // Hook files are optional, but in development vite logs an error even though
   // we suppress the exception. Silence these logs manually.
-  ['cannot find entry point module', 'props.ts'],
-  ['cannot find entry point module', 'runtime.ts'],
+  ['Error when evaluating SSR module', 'props.ts'],
+  ['Error when evaluating SSR module', 'runtime.ts'],
 ];
 
 function isIgnoredError(msg: string) {

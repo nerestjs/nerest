@@ -2,7 +2,7 @@
 import path from 'path';
 import { build, createServer as createViteServer } from 'vite';
 import type { InlineConfig } from 'vite';
-import type { RollupWatcher, RollupWatcherEvent } from 'rollup';
+import type { RolldownWatcher, RolldownWatcherEvent } from 'rolldown';
 import fastifyStatic from '@fastify/static';
 import fastifyMiddie from '@fastify/middie';
 import { createServer } from './shared.js';
@@ -103,12 +103,12 @@ export async function runDevelopmentServer(port: number) {
 }
 
 async function startClientBuildWatcher(config: InlineConfig) {
-  const watcher = (await build(config)) as RollupWatcher;
+  const watcher = (await build(config)) as RolldownWatcher;
   return new Promise<void>((resolve) => {
     // We need to have a built manifest.json to provide assets
-    // links in SSR. We will wait for rollup to report when it
+    // links in SSR. We will wait for rolldown to report when it
     // has finished the build
-    const listener = (ev: RollupWatcherEvent) => {
+    const listener = (ev: RolldownWatcherEvent) => {
       if (ev.code === 'END') {
         watcher.off('event', listener);
         resolve();
