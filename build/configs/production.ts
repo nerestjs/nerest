@@ -16,7 +16,7 @@ export async function viteConfigProductionClient(
       // Manifest is needed to report used assets in SSR handles
       manifest: true,
       modulePreload: false,
-      rollupOptions: {
+      rolldownOptions: {
         input: [
           '/node_modules/@nerest/nerest/client/index.ts',
           ...args.appDirectories.map((dir) => path.join(dir, 'index.tsx')),
@@ -51,7 +51,7 @@ export async function viteConfigProductionServer(
       modulePreload: false,
       // This is an important setting for producing a server build
       ssr: true,
-      rollupOptions: {
+      rolldownOptions: {
         input: '/node_modules/@nerest/nerest/server/production.ts',
         output: {
           dir: 'build',

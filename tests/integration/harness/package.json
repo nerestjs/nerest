@@ -18,7 +18,8 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "relative-deps": "^1.0.7",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vite": "^8"
   },
   "relativeDependencies": {
     "@nerest/nerest": "../../.."

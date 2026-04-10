@@ -16,7 +16,7 @@ export async function viteConfigDevelopmentClient(
       manifest: true,
       modulePreload: false,
       watch: {},
-      rollupOptions: {
+      rolldownOptions: {
         input: [
           '/node_modules/@nerest/nerest/client/index.ts',
           ...args.appDirectories.map((dir) => path.join(dir, 'index.tsx')),
