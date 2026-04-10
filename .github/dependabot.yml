@@ -21,6 +21,7 @@ updates:
           - 'vite'
           - 'vitest'
           - 'vite-*'
+          - '@vitejs/*'
       react:
         patterns:
           - 'react'
