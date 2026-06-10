@@ -11,7 +11,10 @@ export async function viteConfigDevelopmentClient(
 ): Promise<InlineConfig> {
   return {
     ...(await viteConfigShared(args)),
+    mode: 'development',
     build: {
+      minify: false,
+      sourcemap: true,
       // Manifest is needed to report used assets in SSR handles
       manifest: true,
       modulePreload: false,
@@ -39,6 +42,11 @@ export async function viteConfigDevelopmentServer(
 ): Promise<InlineConfig> {
   return {
     ...(await viteConfigShared(args)),
+    mode: 'development',
+    build: {
+      minify: false,
+      sourcemap: true,
+    },
     server: {
       // Middleware lets vite compile on the fly, providing
       // hot reload of certain modules
