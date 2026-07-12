@@ -51,9 +51,9 @@
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^15.3.5",
     "@fastify/middie": "^9.3.1",
-    "@fastify/static": "^9.1.0",
+    "@fastify/static": "^10.1.0",
     "@fastify/swagger": "^9.7.0",
-    "@fastify/swagger-ui": "^5.2.5",
+    "@fastify/swagger-ui": "^6.1.0",
     "@vitejs/plugin-react": "^6.0.1",
     "ajv": "^8.18.0",
     "ajv-formats": "^3.0.1",
