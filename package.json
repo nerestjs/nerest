@@ -75,7 +75,7 @@
     "@tinkoff/prettier-config": "^5.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "lint-staged": "^16.4.0",
+    "lint-staged": "^17.0.8",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "simple-git-hooks": "^2.13.1",
