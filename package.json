@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json -d",
-    "lint": "eslint --ext .ts .",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
     "prepare": "simple-git-hooks",
     "test": "npm run test:module && npm run test:integration:dev && npm run test:integration:prod",
     "test:integration:dev": "sh tests/integration/run.development.sh",
@@ -71,7 +71,6 @@
     "@commitlint/config-conventional": "^20.5.0",
     "@playwright/test": "^1.61.0",
     "@tinkoff/eslint-config": "^6.0.0",
-    "@tinkoff/eslint-config-react": "^6.0.0",
     "@tinkoff/prettier-config": "^6.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

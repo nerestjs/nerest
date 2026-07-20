@@ -1,4 +1,4 @@
-import {lazy, Suspense, useEffect, useState} from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import type { HeaderProps } from './schema';
 import styles from './index.module.css';
 
@@ -21,7 +21,10 @@ export default function HeaderApp({
   });
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsListVisible(true), countdownSeconds * 1000);
+    const timer = setTimeout(
+      () => setIsListVisible(true),
+      countdownSeconds * 1000
+    );
 
     return () => clearTimeout(timer);
   }, [countdownSeconds]);
