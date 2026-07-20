@@ -59,7 +59,7 @@
     "ajv-formats": "^3.0.1",
     "dotenv": "^17.4.1",
     "fast-glob": "^3.3.3",
-    "fast-uri": "^3.1.0",
+    "fast-uri": "^4.1.0",
     "fastify": "^5.8.4",
     "fastify-graceful-shutdown": "^5.0.0",
     "json-schema-to-typescript": "^15.0.4",
