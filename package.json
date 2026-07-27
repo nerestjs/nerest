@@ -67,7 +67,7 @@
     "vite-plugin-externals": "^0.6.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.0",
+    "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^20.5.0",
     "@playwright/test": "^1.61.0",
     "@tinkoff/eslint-config": "^6.0.0",
