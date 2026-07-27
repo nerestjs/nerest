@@ -149,6 +149,30 @@ export function logger(): FastifyServerOptions['logger'] {
 
 To disable the logger, return `false` from the function.
 
+### Preload
+
+If the module `nerest/preload.ts` exists in the micro frontend's root directory, it is built into a standalone `build/preload.mjs` bundle and loaded via Node's `--import` flag **before** the server bundle when the server is started with [`nerest start`](#nerest-start). This means its top-level code runs before any framework or application module is imported - the right place to register instrumentation or apply patches to modules that will be imported by main application code.
+
+The module may additionally export optional `startup` and `shutdown` handlers. `startup` runs as early as possible during server start, and `shutdown` runs late during graceful shutdown - useful for flushing buffered work. Both may be async.
+
+```typescript
+// nerest/preload.ts
+
+// Top-level code runs before the server is imported.
+registerMyInstrumentation();
+
+export async function startup() {
+  console.log('Server is starting up');
+}
+
+export async function shutdown() {
+  // e.g. flush buffered spans before the process exits
+  await myInstrumentation.shutdown();
+}
+```
+
+Because `--import` is what guarantees the preload runs first, the server must be launched with `nerest start` for this ordering to hold. If `nerest/preload.ts` is absent, no preload bundle is produced and `nerest start` behaves like a plain server launch.
+
 ### Preview
 
 For customizing micro frontend previews, create a `nerest/preview-head.html` file in the project's root directory. This file allows you to modify the preview rendering by appending your own HTML markup, such as metadata, external stylesheets, or scripts to the end of the `<head>`. Use it to to enhance the appearance and behavior of previews according to your specific needs.
@@ -172,6 +196,7 @@ Creates the production build of the micro frontend, generating the necessary fil
 
 - Serverside entry is outputted to the `build/server.mjs` file.
 - Clientside static files are outputted to the `build/client/assets` directory. These files should be made available [at the `STATIC_PATH` URL](#static_path).
+- If a [`nerest/preload.ts`](#preload) module exists, it is outputted to the `build/preload.mjs` file.
 
 ### `nerest typegen`
 
@@ -186,6 +211,14 @@ nerest typegen 'apps/*/schema.json' 'schemas/*.json'
 ### `nerest watch`
 
 Starts the development server on the default port 3000. The server will automatically reload when changes are made to the app's source code.
+
+### `nerest start`
+
+Starts the production server previously produced by `nerest build`, listening on the port from the `PORT` environment variable (default 3000). If a [`build/preload.mjs`](#preload) bundle exists, it is loaded via `node --import` before the server so its instrumentation runs first. Termination signals are forwarded so graceful shutdown runs, making this the recommended production entrypoint:
+
+```dockerfile
+CMD ["npx", "nerest", "start"]
+```
 
 ## Development
 
