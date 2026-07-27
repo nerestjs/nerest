@@ -8,6 +8,10 @@ get_script_dir() {
 # Install dependencies in harness directory
 install_dependencies() {
   HARNESS_DIR="$1"
+
+  echo "Building @nerest/nerest..."
+  (cd "$HARNESS_DIR/../../.." && npm run build)
+
   echo "Installing harness dependencies..."
   cd "$HARNESS_DIR"
   npm install

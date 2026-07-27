@@ -4,8 +4,6 @@
   "type": "module",
   "scripts": {
     "build": "nerest build",
-    "preinstall": "npm --prefix ../../.. run build",
-    "prepare": "chmod +x node_modules/.bin/nerest",
     "typegen": "nerest typegen",
     "watch": "nerest watch"
   },
