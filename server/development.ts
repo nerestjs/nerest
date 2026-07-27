@@ -73,6 +73,12 @@ export async function runDevelopmentServer(port: number) {
     loadPropsHook: (entry: string) =>
       viteSsr.ssrLoadModule(`/apps/${entry}/props.ts`),
     loadRuntimeHook: () => viteSsr.ssrLoadModule('/nerest/runtime.ts'),
+    // There is no separate preload bundle in development, so we load the
+    // source module directly. Its startup/shutdown handlers still run, but its
+    // top-level code executes here rather than before the server, which is
+    // fine for local development.
+    loadPreloadHook: () =>
+      viteSsr.ssrLoadModule('/nerest/preload.ts').catch(() => undefined),
   });
 
   // Register middie to use vite's Connect-style middlewares

@@ -11,6 +11,10 @@ import { setupK8SProbes } from './parts/k8s-probes.js';
 import { runRuntimeHook } from './hooks/runtime.js';
 import { runPropsHook } from './hooks/props.js';
 import { runLoggerHook } from './hooks/logger.js';
+import {
+  runPreloadStartupHook,
+  runPreloadShutdownHook,
+} from './hooks/preload.js';
 import type { Project } from './loaders/project.js';
 import { loadPreviewParts } from './loaders/preview.js';
 import type { PreviewParts } from './loaders/preview.js';
@@ -24,6 +28,7 @@ type ServerOptions = {
   loadComponent: (entry: string) => Promise<ComponentType>;
   loadPropsHook: (entry: string) => Promise<unknown>;
   loadRuntimeHook: () => Promise<unknown>;
+  loadPreloadHook: () => Promise<unknown>;
 };
 
 type ServerOptionsWithPreview = ServerOptions & {
@@ -31,7 +36,7 @@ type ServerOptionsWithPreview = ServerOptions & {
 };
 
 export async function createServer(options: ServerOptions) {
-  const { project, root, loadRuntimeHook } = options;
+  const { project, root, loadRuntimeHook, loadPreloadHook } = options;
 
   const app = fastify({
     logger: (await runLoggerHook(loadRuntimeHook)) ?? true,
@@ -47,6 +52,10 @@ export async function createServer(options: ServerOptions) {
     },
   });
 
+  // Execute the preload hook's `startup` handler as early as possible, before
+  // any routes or plugins are set up
+  await runPreloadStartupHook(app.log, loadPreloadHook);
+
   // Setup payload validation and Swagger based on apps' JSON Schema
   setupValidator(app);
   await setupSwagger(app, project);
@@ -58,6 +67,14 @@ export async function createServer(options: ServerOptions) {
 
   // Add graceful shutdown handler to prevent requests errors
   await app.register(fastifyGracefulShutdown);
+
+  // Run the preload hook's `shutdown` handler late in the shutdown sequence
+  app.after((err) => {
+    if (err) throw err;
+    app.gracefulShutdown(async () => {
+      await runPreloadShutdownHook(app.log, loadPreloadHook);
+    });
+  });
 
   if (process.env.ENABLE_K8S_PROBES) {
     await setupK8SProbes(app);

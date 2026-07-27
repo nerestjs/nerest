@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs/promises';
+import { existsSync } from 'fs';
 
 import { build } from 'vite';
 
@@ -11,6 +12,7 @@ import { loadProject } from '../server/loaders/project.js';
 import {
   viteConfigProductionClient,
   viteConfigProductionServer,
+  viteConfigProductionPreload,
 } from './configs/production.js';
 
 export async function buildMicroFrontend() {
@@ -51,6 +53,21 @@ export async function buildMicroFrontend() {
   });
   console.log('Producing production server build...');
   await build(serverViteConfig);
+
+  // Build the optional preload bundle if `nerest/preload.ts` exists. It is
+  // emitted as a standalone `build/preload.mjs` so it can be `--import`ed
+  // before the server (see `nerest start`).
+  if (existsSync(path.join(root, 'nerest/preload.ts'))) {
+    const preloadViteConfig = await viteConfigProductionPreload({
+      root,
+      base: staticPath,
+      buildConfig,
+      project,
+      appDirectories,
+    });
+    console.log('Producing production preload build...');
+    await build(preloadViteConfig);
+  }
 }
 
 async function createNerestManifest(
