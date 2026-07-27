@@ -19,7 +19,7 @@ STATIC_PATH=http://127.0.0.1:3000 npm run build
 
 # Start production server
 echo "Starting production server..."
-ENABLE_K8S_PROBES=true node build/server.mjs > /tmp/nerest-prod-server.log 2>&1 &
+ENABLE_K8S_PROBES=true npx nerest start > /tmp/nerest-prod-server.log 2>&1 &
 SERVER_PID=$!
 
 # Wait for server to be ready
