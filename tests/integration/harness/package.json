@@ -4,12 +4,13 @@
   "type": "module",
   "scripts": {
     "build": "nerest build",
-    "prepare": "relative-deps && chmod +x node_modules/.bin/nerest",
+    "preinstall": "npm --prefix ../../.. run build",
+    "prepare": "chmod +x node_modules/.bin/nerest",
     "typegen": "nerest typegen",
     "watch": "nerest watch"
   },
   "dependencies": {
-    "@nerest/nerest": "latest",
+    "@nerest/nerest": "file:../../..",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
@@ -17,11 +18,7 @@
     "@tsconfig/vite-react": "^7.0.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "relative-deps": "^1.0.7",
     "typescript": "^6.0.2",
     "vite": "^8"
-  },
-  "relativeDependencies": {
-    "@nerest/nerest": "../../.."
   }
 }
