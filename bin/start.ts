@@ -35,10 +35,16 @@ export async function start() {
     }
   };
 
-  process.on('SIGTERM', () => forwardSignal('SIGTERM'));
-  process.on('SIGINT', () => forwardSignal('SIGINT'));
+  const forwardSigterm = () => forwardSignal('SIGTERM');
+  const forwardSigint = () => forwardSignal('SIGINT');
+
+  process.on('SIGTERM', forwardSigterm);
+  process.on('SIGINT', forwardSigint);
 
   child.on('exit', (code, signal) => {
+    process.off('SIGTERM', forwardSigterm);
+    process.off('SIGINT', forwardSigint);
+
     if (signal) {
       // Re-raise the signal so our exit status reflects how the child died.
       process.kill(process.pid, signal);
