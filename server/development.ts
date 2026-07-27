@@ -86,13 +86,13 @@ export async function runDevelopmentServer(port: number) {
 
     // Set CORS headers so the development server assets can be accessed from
     // remote devices, e.g. mobile phones
-    setHeaders(res) {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET');
-      res.setHeader(
-        'Access-Control-Allow-Headers',
-        'X-Requested-With, content-type, Authorization'
-      );
+    setHeaders(reply) {
+      reply.headers({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers':
+          'X-Requested-With, content-type, Authorization',
+      });
     },
   });
 
