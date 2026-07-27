@@ -64,3 +64,26 @@ export async function viteConfigProductionServer(
     plugins: [react()],
   };
 }
+
+export async function viteConfigProductionPreload(
+  args: BuildArgs
+): Promise<InlineConfig> {
+  return {
+    ...(await viteConfigShared(args)),
+    build: {
+      emptyOutDir: false,
+      modulePreload: false,
+      ssr: true,
+      rolldownOptions: {
+        input: '/nerest/preload.ts',
+        output: {
+          dir: 'build',
+          entryFileNames: `preload.mjs`,
+          chunkFileNames: `preload-[name].mjs`,
+          assetFileNames: `preload-[name].[ext]`,
+        },
+      },
+    },
+    plugins: [react()],
+  };
+}
