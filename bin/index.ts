@@ -5,6 +5,7 @@ import 'dotenv/config';
 import { build } from './build.js';
 import { typegen } from './typegen.js';
 import { watch } from './watch.js';
+import { start } from './start.js';
 
 // TODO: add CLI help and manual, maybe use a CLI framework like oclif
 async function cliEntry(args: string[]) {
@@ -14,6 +15,8 @@ async function cliEntry(args: string[]) {
     await typegen(args.slice(1));
   } else if (args[0] === 'watch') {
     await watch();
+  } else if (args[0] === 'start') {
+    await start();
   }
 }
 
