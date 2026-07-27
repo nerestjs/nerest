@@ -5,6 +5,10 @@ import type { AppEntry } from '../../server/loaders/apps.js';
 import { loadPreviewParts } from '../../server/loaders/preview.js';
 import { runLoggerHook } from '../../server/hooks/logger.js';
 import { runRuntimeHook } from '../../server/hooks/runtime.js';
+import {
+  runPreloadStartupHook,
+  runPreloadShutdownHook,
+} from '../../server/hooks/preload.js';
 import { setupValidator } from '../../server/parts/validator.js';
 import { setupSwagger } from '../../server/parts/swagger.js';
 import { setupK8SProbes } from '../../server/parts/k8s-probes.js';
@@ -14,8 +18,12 @@ vi.mock('fastify', () => ({
     register: vi.fn(),
     post: vi.fn(),
     get: vi.fn(),
+    after: vi.fn((cb) => cb()),
+    gracefulShutdown: vi.fn(),
     log: {
       error: vi.fn(),
+      info: vi.fn(),
+      fatal: vi.fn(),
     },
   })),
 }));
@@ -24,6 +32,7 @@ vi.mock('fastify-graceful-shutdown');
 vi.mock('../../server/loaders/preview.js');
 vi.mock('../../server/hooks/logger.js');
 vi.mock('../../server/hooks/runtime.js');
+vi.mock('../../server/hooks/preload.js');
 vi.mock('../../server/parts/validator.js');
 vi.mock('../../server/parts/swagger.js');
 vi.mock('../../server/parts/k8s-probes.js');
@@ -59,6 +68,7 @@ describe('server setup', () => {
   const mockLoadComponent = vi.fn();
   const mockLoadPropsHook = vi.fn();
   const mockLoadRuntimeHook = vi.fn();
+  const mockLoadPreloadHook = vi.fn();
 
   it('should create server with correct configuration', async () => {
     const server = await createServer({
@@ -68,6 +78,7 @@ describe('server setup', () => {
       loadComponent: mockLoadComponent,
       loadPropsHook: mockLoadPropsHook,
       loadRuntimeHook: mockLoadRuntimeHook,
+      loadPreloadHook: mockLoadPreloadHook,
     });
 
     expect(server).toBeDefined();
@@ -77,6 +88,22 @@ describe('server setup', () => {
     expect(loadPreviewParts).toHaveBeenCalledWith('/test');
     expect(server.register).toHaveBeenCalledWith(fastifyGracefulShutdown);
     expect(runRuntimeHook).toHaveBeenCalledWith(server, mockLoadRuntimeHook);
+
+    // Preload startup runs early with the app logger and preload loader
+    expect(runPreloadStartupHook).toHaveBeenCalledWith(
+      server.log,
+      mockLoadPreloadHook
+    );
+
+    // Preload shutdown is wired into graceful shutdown: the registered
+    // handler, when invoked, runs the shutdown hook
+    expect(server.gracefulShutdown).toHaveBeenCalledWith(expect.any(Function));
+    const shutdownHandler = (server.gracefulShutdown as any).mock.calls[0][0];
+    await shutdownHandler();
+    expect(runPreloadShutdownHook).toHaveBeenCalledWith(
+      server.log,
+      mockLoadPreloadHook
+    );
   });
 
   it('should setup API routes for each app', async () => {
@@ -87,6 +114,7 @@ describe('server setup', () => {
       loadComponent: mockLoadComponent,
       loadPropsHook: mockLoadPropsHook,
       loadRuntimeHook: mockLoadRuntimeHook,
+      loadPreloadHook: mockLoadPreloadHook,
     });
 
     expect(server.post).toHaveBeenCalledWith(
@@ -113,6 +141,7 @@ describe('server setup', () => {
       loadComponent: mockLoadComponent,
       loadPropsHook: mockLoadPropsHook,
       loadRuntimeHook: mockLoadRuntimeHook,
+      loadPreloadHook: mockLoadPreloadHook,
     });
 
     expect(server.get).toHaveBeenCalledWith(
@@ -135,6 +164,7 @@ describe('server setup', () => {
       loadComponent: mockLoadComponent,
       loadPropsHook: mockLoadPropsHook,
       loadRuntimeHook: mockLoadRuntimeHook,
+      loadPreloadHook: mockLoadPreloadHook,
     });
 
     expect(server.log.error).toHaveBeenCalledWith(
@@ -159,6 +189,7 @@ describe('server setup', () => {
         loadComponent: mockLoadComponent,
         loadPropsHook: mockLoadPropsHook,
         loadRuntimeHook: mockLoadRuntimeHook,
+        loadPreloadHook: mockLoadPreloadHook,
       });
 
       expect(setupK8SProbes).toHaveBeenCalledWith(server);
@@ -174,6 +205,7 @@ describe('server setup', () => {
         loadComponent: mockLoadComponent,
         loadPropsHook: mockLoadPropsHook,
         loadRuntimeHook: mockLoadRuntimeHook,
+        loadPreloadHook: mockLoadPreloadHook,
       });
 
       expect(setupK8SProbes).not.toHaveBeenCalled();
