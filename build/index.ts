@@ -12,8 +12,8 @@ import { loadProject } from '../server/loaders/project.js';
 import {
   viteConfigProductionClient,
   viteConfigProductionServer,
-  viteConfigProductionPreload,
 } from './configs/production.js';
+import { buildPreloadBundle } from './preload.js';
 
 export async function buildMicroFrontend() {
   const root = process.cwd();
@@ -54,19 +54,9 @@ export async function buildMicroFrontend() {
   console.log('Producing production server build...');
   await build(serverViteConfig);
 
-  // Build the optional preload bundle if `nerest/preload.ts` exists. It is
-  // emitted as a standalone `build/preload.mjs` so it can be `--import`ed
-  // before the server (see `nerest start`).
+  // Build the optional preload bundle if it exists
   if (existsSync(path.join(root, 'nerest/preload.ts'))) {
-    const preloadViteConfig = await viteConfigProductionPreload({
-      root,
-      base: staticPath,
-      buildConfig,
-      project,
-      appDirectories,
-    });
-    console.log('Producing production preload build...');
-    await build(preloadViteConfig);
+    await buildPreloadBundle(root, staticPath);
   }
 }
 

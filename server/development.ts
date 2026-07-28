@@ -1,5 +1,7 @@
 // This is the nerest development server entrypoint
 import path from 'path';
+import { existsSync } from 'fs';
+import { pathToFileURL } from 'url';
 import { build, createServer as createViteServer } from 'vite';
 import type { InlineConfig } from 'vite';
 import type { RolldownWatcher, RolldownWatcherEvent } from 'rolldown';
@@ -59,6 +61,12 @@ export async function runDevelopmentServer(port: number) {
   // Load app entries following the `apps/{name}/index.tsx` convention
   const apps = await loadApps(root, appDirectories, staticPath);
 
+  // The preload bundle is built and `--import`ed before this server by
+  // `nerest watch`, so its top-level code has already run. Here we import that
+  // same module to reach its optional startup/shutdown handlers; the cached
+  // instance is returned without re-running its side effects.
+  const preloadBundle = path.join(root, 'build', 'preload.mjs');
+
   const app = await createServer({
     root,
     project,
@@ -73,12 +81,12 @@ export async function runDevelopmentServer(port: number) {
     loadPropsHook: (entry: string) =>
       viteSsr.ssrLoadModule(`/apps/${entry}/props.ts`),
     loadRuntimeHook: () => viteSsr.ssrLoadModule('/nerest/runtime.ts'),
-    // There is no separate preload bundle in development, so we load the
-    // source module directly. Its startup/shutdown handlers still run, but its
-    // top-level code executes here rather than before the server, which is
-    // fine for local development.
-    loadPreloadHook: () =>
-      viteSsr.ssrLoadModule('/nerest/preload.ts').catch(() => undefined),
+    loadPreloadHook: async () =>
+      existsSync(preloadBundle)
+        ? import(/* @vite-ignore */ pathToFileURL(preloadBundle).href).catch(
+            () => undefined
+          )
+        : undefined,
   });
 
   // Register middie to use vite's Connect-style middlewares

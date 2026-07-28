@@ -5,11 +5,11 @@ import { pathToFileURL } from 'url';
 
 const SERVER_ENTRY = path.join('build', 'server.mjs');
 
+export async function start() {
+  spawnServer(resolveStartArgs());
+}
+
 // Resolve the arguments passed to `node` when starting the production server.
-// If a preload bundle was produced (i.e. the micro frontend has a
-// `nerest/preload.ts`), it is `--import`ed before the server entry so that its
-// top-level code runs first — this is what lets instrumentation libraries
-// patch modules before the server imports them.
 export function resolveStartArgs(root: string = process.cwd()): string[] {
   const preloadBundle = path.join(root, 'build', 'preload.mjs');
 
@@ -21,13 +21,13 @@ export function resolveStartArgs(root: string = process.cwd()): string[] {
   return [SERVER_ENTRY];
 }
 
-// Start the production server. Spawns `node` (optionally preloading the
-// instrumentation bundle) as a child process and forwards termination signals
-// so that graceful shutdown — and the preload's `shutdown` handler — run.
-export async function start() {
-  const args = resolveStartArgs();
-
-  const child = spawn(process.execPath, args, { stdio: 'inherit' });
+// Spawn `node` with the given args as a child process, forwarding termination
+// signals so that graceful shutdown runs.
+export function spawnServer(args: string[], env?: NodeJS.ProcessEnv) {
+  const child = spawn(process.execPath, args, {
+    stdio: 'inherit',
+    env: { ...process.env, ...env },
+  });
 
   const forwardSignal = (signal: NodeJS.Signals) => {
     if (!child.killed) {
@@ -52,4 +52,6 @@ export async function start() {
       process.exit(code ?? 0);
     }
   });
+
+  return child;
 }
