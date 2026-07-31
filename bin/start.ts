@@ -5,20 +5,36 @@ import { pathToFileURL } from 'url';
 
 const SERVER_ENTRY = path.join('build', 'server.mjs');
 
+export type StartPlan =
+  | { mode: 'in-process'; entry: string }
+  | { mode: 'spawn'; args: string[] };
+
 export async function start() {
-  spawnServer(resolveStartArgs());
+  const plan = resolveStartPlan();
+
+  if (plan.mode === 'in-process') {
+    await import(pathToFileURL(plan.entry).href);
+    return;
+  }
+
+  spawnServer(plan.args);
 }
 
-// Resolve the arguments passed to `node` when starting the production server.
-export function resolveStartArgs(root: string = process.cwd()): string[] {
+// Decide how to launch the production server.
+export function resolveStartPlan(root: string = process.cwd()): StartPlan {
   const preloadBundle = path.join(root, 'build', 'preload.mjs');
 
   if (existsSync(preloadBundle)) {
-    // `--import` expects a module specifier; a file URL is the portable form.
-    return ['--import', pathToFileURL(preloadBundle).href, SERVER_ENTRY];
+    // `--import` is what guarantees the preload's top-level code runs before
+    // the server's module graph.
+    return {
+      mode: 'spawn',
+      args: ['--import', pathToFileURL(preloadBundle).href, SERVER_ENTRY],
+    };
   }
 
-  return [SERVER_ENTRY];
+  // Without preload there's no need for a child process.
+  return { mode: 'in-process', entry: path.join(root, SERVER_ENTRY) };
 }
 
 // Spawn `node` with the given args as a child process, forwarding termination

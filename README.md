@@ -214,10 +214,16 @@ Starts the development server on the default port 3000. The server will automati
 
 ### `nerest start`
 
-Starts the production server previously produced by `nerest build`, listening on the port from the `PORT` environment variable (default 3000). If a [`build/preload.mjs`](#preload) bundle exists, it is loaded via `node --import` before the server so its instrumentation runs first. Termination signals are forwarded so graceful shutdown runs, making this the recommended production entrypoint:
+Starts the production server previously produced by `nerest build`, listening on the port from the `PORT` environment variable (default 3000). This is the recommended production entrypoint:
 
 ```dockerfile
 CMD ["npx", "nerest", "start"]
+```
+
+If a [`build/preload.mjs`](#preload) bundle exists, it is loaded via `node --import` before the server so its instrumentation runs first. If you'd like to avoid an extra resident process, use this entrypoint:
+
+```dockerfile
+CMD ["node", "--import", "./build/preload.mjs", "./build/server.mjs"]
 ```
 
 ## Development
