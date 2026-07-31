@@ -2,8 +2,6 @@ import { existsSync } from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
 
-import { runDevelopmentServer } from '../server/development.js';
-import { buildPreloadBundle } from '../build/preload.js';
 import { spawnServer } from './start.js';
 
 const PRELOAD_SOURCE_ENTRY = path.join('nerest', 'preload.ts');
@@ -20,6 +18,7 @@ export async function watch() {
   // If the micro frontend has a `nerest/preload.ts`, we build it and re-launch
   // ourselves in a child `node` that `--import`s the bundle before anything else.
   if (!process.env[WATCH_CHILD_ENV] && existsSync(PRELOAD_SOURCE_ENTRY)) {
+    const { buildPreloadBundle } = await import('../build/preload.js');
     await buildPreloadBundle(root, '/');
 
     const preloadBundle = pathToFileURL(
@@ -33,6 +32,8 @@ export async function watch() {
   }
 
   console.log('Starting Nerest watch...');
+
+  const { runDevelopmentServer } = await import('../server/development.js');
   await runDevelopmentServer(
     process.env.PORT ? Number(process.env.PORT) : 3000
   );

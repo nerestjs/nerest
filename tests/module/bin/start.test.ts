@@ -3,9 +3,9 @@ import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
 import { pathToFileURL } from 'url';
-import { resolveStartArgs } from '../../../bin/start.js';
+import { resolveStartPlan } from '../../../bin/start.js';
 
-describe('resolveStartArgs', () => {
+describe('resolveStartPlan', () => {
   let root: string;
 
   beforeEach(async () => {
@@ -17,18 +17,24 @@ describe('resolveStartArgs', () => {
     await fs.rm(root, { recursive: true, force: true });
   });
 
-  it('should start the server directly when no preload bundle exists', () => {
-    expect(resolveStartArgs(root)).toEqual([path.join('build', 'server.mjs')]);
+  it('should run the server in-process when no preload bundle exists', () => {
+    expect(resolveStartPlan(root)).toEqual({
+      mode: 'in-process',
+      entry: path.join(root, 'build', 'server.mjs'),
+    });
   });
 
-  it('should --import the preload bundle when it exists', async () => {
+  it('should spawn a child that --imports the preload bundle when it exists', async () => {
     const preloadBundle = path.join(root, 'build', 'preload.mjs');
     await fs.writeFile(preloadBundle, '// preload', 'utf-8');
 
-    expect(resolveStartArgs(root)).toEqual([
-      '--import',
-      pathToFileURL(preloadBundle).href,
-      path.join('build', 'server.mjs'),
-    ]);
+    expect(resolveStartPlan(root)).toEqual({
+      mode: 'spawn',
+      args: [
+        '--import',
+        pathToFileURL(preloadBundle).href,
+        path.join('build', 'server.mjs'),
+      ],
+    });
   });
 });
