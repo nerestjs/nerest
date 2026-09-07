@@ -6,8 +6,7 @@ import { pathToFileURL } from 'url';
 const SERVER_ENTRY = path.join('build', 'server.mjs');
 
 export type StartPlan =
-  | { mode: 'in-process'; entry: string }
-  | { mode: 'spawn'; args: string[] };
+  { mode: 'in-process'; entry: string } | { mode: 'spawn'; args: string[] };
 
 export async function start() {
   const plan = resolveStartPlan();
