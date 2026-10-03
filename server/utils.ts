@@ -5,7 +5,7 @@ export function randomId() {
   return crypto.randomBytes(10).toString('hex');
 }
 
-const escapeMap: Record<string, string> = {
+export const escapeMap: Record<string, string> = {
   '<': '\\u003c',
 };
 
