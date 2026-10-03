@@ -10,5 +10,9 @@
 export interface HeaderProps {
   countdownSeconds: number;
   affirmation?: string;
+  /**
+   * Arbitrary untrusted text used to verify XSS protection. May contain HTML-significant characters and sequences such as '<', '>', '&'
+   */
+  xssProp?: string;
   [k: string]: unknown;
 }

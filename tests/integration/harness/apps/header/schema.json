@@ -5,7 +5,11 @@
   "type": "object",
   "properties": {
     "countdownSeconds": { "type": "number" },
-    "affirmation": { "type": "string" }
+    "affirmation": { "type": "string" },
+    "xssProp": {
+      "type": "string",
+      "description": "Arbitrary untrusted text used to verify XSS protection. May contain HTML-significant characters and sequences such as '<', '>', '&'"
+    }
   },
   "required": ["countdownSeconds"]
 }
