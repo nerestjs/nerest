@@ -2,7 +2,7 @@ import type { ComponentType } from 'react';
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import type { Project } from '../loaders/project.js';
-import { randomId } from '../utils.js';
+import { randomId, stringifyForInjectAsRawToScript } from '../utils.js';
 
 type RenderProps = {
   name: string;
@@ -34,9 +34,7 @@ function renderSsrComponent(
   // data-app-name and data-app-id are used by client entrypoint to hydrate
   // apps using correct serialized props
   const container = `<div data-project-name="${project.name}" data-app-name="${appName}" data-app-id="${appId}">${html}</div>`;
-  const script = `<script type="application/json" data-app-id="${appId}">${JSON.stringify(
-    props
-  )}</script>`;
+  const script = `<script type="application/json" data-app-id="${appId}">${stringifyForInjectAsRawToScript(props)}</script>`;
 
   return container + script;
 }
