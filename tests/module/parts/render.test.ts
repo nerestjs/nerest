@@ -2,7 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { createElement } from 'react';
 import { renderApp } from '../../../server/parts/render.js';
 
-vi.mock('../../../server/utils.js', () => ({
+vi.mock('../../../server/utils.js', async (importOriginal) => ({
+  ...(await importOriginal()),
   randomId: () => 'test-id-123',
 }));
 
@@ -53,6 +54,22 @@ describe('renderApp', () => {
     );
 
     const expectedScript = `<script type="application/json" data-app-id="test-id-123">${JSON.stringify(customProps)}</script>`;
+    expect(html).toContain(expectedScript);
+  });
+
+  it('should escape script closing tags in serialized props', () => {
+    const customProps = { message: '</script><script>alert(1)</script>' };
+    const { html } = renderApp(
+      {
+        name: 'test-app',
+        assets: [],
+        component: TestComponent,
+        project: mockProject,
+      },
+      customProps
+    );
+
+    const expectedScript = `<script type="application/json" data-app-id="test-id-123">${JSON.stringify(customProps).replace(/</g, '\\u003c')}</script>`;
     expect(html).toContain(expectedScript);
   });
 
