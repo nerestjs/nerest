@@ -1,1 +1,4 @@
-{ "countdownSeconds": 5 }
+{
+  "countdownSeconds": 5,
+  "xssProp": "</script><script>alert('if you see this, xss has been successfully injected')</script>"
+}
