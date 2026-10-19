@@ -1,5 +1,4 @@
 import Ajv from 'ajv';
-import fastUri from 'fast-uri';
 import addFormats from 'ajv-formats';
 import type { FastifyInstance } from 'fastify';
 
@@ -10,7 +9,6 @@ export const validator = new Ajv.default({
   coerceTypes: 'array',
   useDefaults: true,
   removeAdditional: true,
-  uriResolver: fastUri,
   addUsedSchema: false,
   // Explicitly set allErrors to `false`.
   // When set to `true`, a DoS attack is possible.
