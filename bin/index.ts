@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 // All executions of `nerest <command>` get routed through here
-import 'dotenv/config';
+
+// Load environment variables from .env
+try {
+  process.loadEnvFile();
+} catch {
+  // .env is optional, ignore it if it doesn't exist
+}
 
 // TODO: add CLI help and manual, maybe use a CLI framework like oclif
 async function cliEntry(args: string[]) {
