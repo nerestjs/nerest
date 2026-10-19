@@ -1,26 +1,29 @@
 import { describe, it, expect, vi } from 'vitest';
 import fs from 'fs/promises';
-import fg from 'fast-glob';
+import { glob } from 'tinyglobby';
 import { loadAppExamples } from '../../../server/loaders/examples.js';
 
 vi.mock('fs/promises');
-vi.mock('fast-glob');
+vi.mock('tinyglobby', () => ({
+  glob: vi.fn(),
+  convertPathToPattern: vi.fn((path) => path),
+}));
 
 describe('loadAppExamples', () => {
   it('should use correct glob pattern', async () => {
-    vi.mocked(fg.convertPathToPattern).mockReturnValue('converted/path');
-    vi.mocked(fg.glob).mockResolvedValue([]);
+    vi.mocked(glob).mockResolvedValue([]);
 
     await loadAppExamples('/app');
 
-    expect(fg.convertPathToPattern).toHaveBeenCalledWith('/app/examples');
-    expect(fg.glob).toHaveBeenCalledWith('converted/path/*.json', {
+    expect(glob).toHaveBeenCalledWith('/app/examples/*.json', {
       onlyFiles: true,
+      absolute: true,
+      expandDirectories: false,
     });
   });
 
   it('should load and parse example files', async () => {
-    vi.mocked(fg.glob).mockResolvedValue([
+    vi.mocked(glob).mockResolvedValue([
       '/app/examples/basic.json',
       '/app/examples/advanced.json',
     ]);
@@ -38,7 +41,7 @@ describe('loadAppExamples', () => {
   });
 
   it('should handle empty examples directory', async () => {
-    vi.mocked(fg.glob).mockResolvedValue([]);
+    vi.mocked(glob).mockResolvedValue([]);
 
     const examples = await loadAppExamples('/app');
 

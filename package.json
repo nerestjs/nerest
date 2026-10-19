@@ -57,10 +57,10 @@
     "@vitejs/plugin-react": "^6.1.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "fast-glob": "^3.3.3",
     "fastify": "^5.12.1",
     "fastify-graceful-shutdown": "^5.0.0",
     "json-schema-to-typescript": "^16.0.0",
+    "tinyglobby": "^0.2.17",
     "vite": "^8.2.2",
     "vite-plugin-externals": "^0.6.2"
   },
