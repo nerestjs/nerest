@@ -1,13 +1,17 @@
 import path from 'path';
 import fs from 'fs/promises';
-import fg from 'fast-glob';
+import { convertPathToPattern, glob } from 'tinyglobby';
 
 // Loads and parses the example json files for providing
 // `/examples/` routes of the dev server
 export async function loadAppExamples(appRoot: string) {
   const exampleBase = path.join(appRoot, 'examples');
-  const examplePattern = `${fg.convertPathToPattern(exampleBase)}/*.json`;
-  const exampleFiles = await fg.glob(examplePattern, { onlyFiles: true });
+  const examplePattern = `${convertPathToPattern(exampleBase)}/*.json`;
+  const exampleFiles = await glob(examplePattern, {
+    onlyFiles: true,
+    absolute: true,
+    expandDirectories: false,
+  });
 
   const examples: Record<string, unknown> = {};
 

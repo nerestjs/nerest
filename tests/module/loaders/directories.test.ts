@@ -1,12 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
-import fg from 'fast-glob';
+import { glob } from 'tinyglobby';
 import { loadAppDirectories } from '../../../server/loaders/directories.js';
 
-vi.mock('fast-glob', () => ({
-  default: {
-    glob: vi.fn(),
-    convertPathToPattern: vi.fn((path) => path),
-  },
+vi.mock('tinyglobby', () => ({
+  glob: vi.fn(),
+  convertPathToPattern: vi.fn((path) => path),
 }));
 
 vi.mock('../../../server/loaders/manifest.js');
@@ -16,18 +14,24 @@ vi.mock('../../../server/loaders/schema.js');
 
 describe('loadAppDirectories', () => {
   it('should load app directories', async () => {
-    vi.mocked(fg.glob).mockResolvedValue([
-      '/root/apps/app1',
-      '/root/apps/app2',
-    ]);
+    vi.mocked(glob).mockResolvedValue(['/root/apps/app1', '/root/apps/app2']);
 
     const appDirectories = await loadAppDirectories('/root');
 
-    expect(fg.convertPathToPattern).toHaveBeenCalledWith('/root/apps');
-    expect(fg.glob).toHaveBeenCalledWith('/root/apps/*', {
+    expect(glob).toHaveBeenCalledWith('/root/apps/*', {
       onlyDirectories: true,
+      absolute: true,
+      expandDirectories: false,
     });
 
     expect(appDirectories).toEqual(['/root/apps/app1', '/root/apps/app2']);
+  });
+
+  it('should strip trailing slashes from directory paths', async () => {
+    vi.mocked(glob).mockResolvedValue(['/root/apps/app1/']);
+
+    const appDirectories = await loadAppDirectories('/root');
+
+    expect(appDirectories).toEqual(['/root/apps/app1']);
   });
 });

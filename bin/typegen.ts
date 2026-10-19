@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs/promises';
-import fg from 'fast-glob';
+import { glob } from 'tinyglobby';
 import { compileFromFile } from 'json-schema-to-typescript';
 
 // Comment at the start of every type definition file, alerting
@@ -19,7 +19,10 @@ export async function typegen(globs: string[]) {
     globs = ['apps/*/schema.json'];
   }
 
-  const paths = await fg.glob(globs, { onlyFiles: true });
+  const paths = await glob(globs, {
+    onlyFiles: true,
+    expandDirectories: false,
+  });
   console.log(`Found ${paths.length} schemas, generating types...`);
 
   for (const schemaPath of paths) {
